@@ -30,6 +30,13 @@ import 'vue-awesome/icons/brands/markdown'
 import Icon from 'vue-awesome/components/Icon'
 Vue.component('v-icon', Icon)
 
+import ECharts from 'vue-echarts'
+import 'echarts/lib/chart/pie'
+import 'echarts/lib/component/legend'
+import 'echarts/lib/component/title'
+import 'echarts/lib/component/tooltip'
+Vue.component('v-chart', ECharts)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

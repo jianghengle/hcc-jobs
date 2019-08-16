@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import MyHeader from './components/MyHeader'
 import MyFooter from './components/MyFooter'
 import ConfirmModal from './components/modals/ConfirmModal'
