@@ -18,7 +18,7 @@ export default {
   },
   methods: {
     requestData () {
-      var url = xHTTPx + '/myapp/get_csv/data.csv'
+      var url = 'http://129.93.241.22:8000/myapp/get_csv/data.csv'
       this.$http.get(url).then(response => {
         this.data = response.body.data
         this.drawChart()
