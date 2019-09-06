@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="container">
+      <squeue></squeue>
       <div class="columns">
         <div class="column">
           <bar-chart></bar-chart>
@@ -25,12 +26,14 @@
 <script>
 import BarChart from './charts/BarChart'
 import PieChart from './charts/PieChart'
+import Squeue from './Squeue'
 
 export default {
   name: 'my-main',
   components: {
     BarChart,
-    PieChart
+    PieChart,
+    Squeue
   },
   data () {
     return {
