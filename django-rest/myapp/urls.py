@@ -3,6 +3,7 @@ from django.urls import path
 from .views import question_view
 from .views import csv_file_view
 from .views import squeue_view
+from .views import account_view
 
 urlpatterns = [
     path('get_questions', question_view.get_questions, name='get_questions'),
@@ -13,4 +14,5 @@ urlpatterns = [
 
     path('get_csv/<filename>', csv_file_view.get_csv, name='get_csv'),
     path('request_squeue', squeue_view.request_squeue, name='request_squeue'),
+    path('verify_user', account_view.verify_user, name='verify_user')
 ]
