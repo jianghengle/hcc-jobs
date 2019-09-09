@@ -10,7 +10,8 @@ def verify_user(request):
     password = request.data['password']
     try:
         user = MyUser(username, password)
-        return Response(user.to_json())
+        session = MySession.create(username)
+        return Response({'user': user.json(), 'session': session.json()})
     except:
-        return Response({'ok': False})
+        return Response({'user': None})
 
