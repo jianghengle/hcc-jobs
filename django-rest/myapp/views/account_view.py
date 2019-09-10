@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from ..models import MySession
 from ..models.my_user import MyUser
+from . import check_session
 
 @api_view(['Post'])
 def login_user(request):
@@ -16,3 +17,8 @@ def login_user(request):
     except:
         return Response({'user': None})
 
+
+@api_view(['Get'])
+def get_user(request):
+    user = check_session(request)
+    return Response(user.json())

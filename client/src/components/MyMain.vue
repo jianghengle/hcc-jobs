@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div>
+    <div v-if="!token">
       <center class="title is-4">Welcome to Holand Computing Center!</center>
 
       <div class="login-form">
@@ -12,7 +12,7 @@
         <div class="field">
           <label class="label">Username</label>
           <div class="control has-icons-left">
-            <input class="input" type="text" placeholder="HCC username">
+            <input class="input" type="text" placeholder="HCC username" v-model="username">
             <span class="icon is-small is-left">
               <v-icon name="user"/>
             </span>
@@ -22,7 +22,7 @@
         <div class="field">
           <label class="label">Password</label>
           <div class="control has-icons-left">
-            <input class="input" type="password" placeholder="password">
+            <input class="input" type="password" placeholder="password" v-model="password">
             <span class="icon is-small is-left">
               <v-icon name="lock"/>
             </span>
@@ -45,10 +45,17 @@
         </div>
       </div>
     </div>
+
+    <div v-else>
+      <center class="title is-4">Hi {{user.username}}! Please click the menu to access the resources.</center>
+      {{user}}
+
+    </div>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 
 export default {
   name: 'my-main',
@@ -62,12 +69,20 @@ export default {
       user: null
     }
   },
+  computed: {
+    server () {
+      return this.$store.state.servers.account
+    },
+    token () {
+      return this.$store.state.user.token
+    }
+  },
   methods: {
     login () {
       this.username = this.username.trim()
       this.waiting = true
       var message = {username: this.username, password: this.password}
-      this.$http.post('http://129.93.241.22:8000/myapp/login_user', message).then(response => {
+      this.$http.post(this.server + '/myapp/login_user', message).then(response => {
         if(response.body.user){
           this.user = response.body.user
           var session = response.body.session
@@ -90,6 +105,24 @@ export default {
         this.waiting = false
       })
     },
+    mounted () {
+      if(this.token){
+        this.$http.get(this.server + '/myapp/get_user').then(response => {
+          if(response.body.user){
+            this.user = response.body.user
+            this.error = ''
+          }else{
+            this.error = 'Failed to get user!'
+            this.$store.commit('user/reset')
+          }
+          this.waiting = false
+        }, response => {
+          this.error = 'Failed to get user!'
+          this.$store.commit('user/reset')
+          this.waiting = false
+        })
+      }
+    }
   }
 }
 </script>

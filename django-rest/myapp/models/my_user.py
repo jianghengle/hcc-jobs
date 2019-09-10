@@ -19,12 +19,12 @@ class MyUser(object):
 
         cmd = 'groups ' + self.username
         ret = os.popen(cmd).read()
-        groups = ret.split(' : ')[1].split(' ')
+        groups = ret.strip().split(' : ')[1].split(' ')
 
         return {
             'username': self.username,
             'fullname': user['cn'][0],
-            'email': user['email'][0],
+            'email': user['mail'][0],
             'description': user['description'][0],
             'groups': groups
         }

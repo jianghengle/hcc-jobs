@@ -12,7 +12,7 @@ def random_string_digits(stringLength=6):
 
 class MySession(models.Model):
     uid = models.CharField(max_length=128)
-    session_token = models.CharField(max_length=256)
+    session_token = models.CharField(db_index=True, max_length=256)
     active_at = models.DateTimeField('last active at')
 
     def json(self):
@@ -29,3 +29,7 @@ class MySession(models.Model):
         session.active_at = timezone.now()
         session.save()
         return session
+
+    @staticmethod
+    def get_by_token(token):
+        session = MySession.objects.get(session_token=token)
