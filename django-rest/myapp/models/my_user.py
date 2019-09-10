@@ -11,7 +11,7 @@ class MyUser(object):
     def verify_password(self, password):
         status, _ = self.conn.bind_s('uid=' + self.username + ',ou=People,dc=rcf,dc=unl,dc=edu', password, ldap.AUTH_SIMPLE)
         if status != 97:
-            raise 'cannot verify user'
+            raise Exception('cannot verify user')
 
     def json(self):
         results = self.conn.search_s('ou=People,dc=rcf,dc=unl,dc=edu', ldap.SCOPE_SUBTREE, 'uid=%s' % self.username, attrlist=['*'])

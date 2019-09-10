@@ -5,15 +5,15 @@
         Account
       </p>
       <ul class="menu-list">
-        <li><a>Login</a></li>
-        <li><a>Logout</a></li>
+        <li><a :class="{'is-active': routeName=='Account'}">{{username ? username : 'Login'}}</a></li>
+        <li v-if="username"><a @click="logout">Logout</a></li>
       </ul>
       <p class="menu-label">
         Resources
       </p>
       <ul class="menu-list">
         <li>
-          <a class="is-active">Rhino</a>
+          <a>Rhino</a>
           <ul>
             <li><a>Jobs</a></li>
             <li><a>Home Directory</a></li>
@@ -58,6 +58,33 @@ export default {
     return {
       msg: 'Welcome to Your Vue.js App'
     }
+  },
+  computed: {
+    username () {
+      return this.$store.state.user.username
+    },
+    routeName () {
+      return this.$route.name
+    },
+  },
+  methods: {
+    logout () {
+      var confirm = {
+        title: 'Logout',
+        message: 'Are you sure to logout?',
+        button: 'Yes, I am sure.',
+        callback: {
+          context: this,
+          method: this.logoutConfirmed,
+          args: []
+        }
+      }
+      this.$store.commit('modals/openConfirmModal', confirm)
+    },
+    logoutConfirmed () {
+      delete Vue.http.headers.common['Authorization']
+      this.$store.commit('user/reset')
+    },
   }
 }
 </script>

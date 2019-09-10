@@ -32,4 +32,4 @@ class MySession(models.Model):
 
     @staticmethod
     def get_by_token(token):
-        session = MySession.objects.get(session_token=token)
+        return MySession.objects.get(session_token=token)

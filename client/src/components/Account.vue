@@ -32,7 +32,7 @@
         <div class="field">
           <div class="control">
             <label class="checkbox">
-              <input type="checkbox">
+              <input type="checkbox" v-model="rememberMe">
               Remember me
             </label>
           </div>
@@ -46,10 +46,37 @@
       </div>
     </div>
 
-    <div v-else>
-      <center class="title is-4">Hi {{user.username}}! Please click the menu to access the resources.</center>
-      {{user}}
-
+    <div v-if="token && user">
+      <center class="is-size-5 has-text-weight-bold">Welcome {{user.username}} </center>
+      <center>Please click the menu items to access the resources.</center>
+      <div class="user-info">
+        <table class="table">
+          <tbody>
+            <tr>
+              <th>Username</th>
+              <td>{{user.username}}</td>
+            </tr>
+            <tr>
+              <th>Full Name</th>
+              <td>{{user.fullname}}</td>
+            </tr>
+            <tr>
+              <th>Email</th>
+              <td>{{user.email}}</td>
+            </tr>
+            <tr>
+              <th>Description</th>
+              <td>{{user.description}}</td>
+            </tr>
+            <tr>
+              <th>Groups</th>
+              <td>
+                <div v-for="g in user.groups">{{g}}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -58,7 +85,7 @@
 import Vue from 'vue'
 
 export default {
-  name: 'my-main',
+  name: 'account',
   data () {
     return {
       username: '',
@@ -105,23 +132,23 @@ export default {
         this.waiting = false
       })
     },
-    mounted () {
-      if(this.token){
-        this.$http.get(this.server + '/myapp/get_user').then(response => {
-          if(response.body.user){
-            this.user = response.body.user
-            this.error = ''
-          }else{
-            this.error = 'Failed to get user!'
-            this.$store.commit('user/reset')
-          }
-          this.waiting = false
-        }, response => {
+  },
+  mounted () {
+    if(this.token){
+      this.$http.get(this.server + '/myapp/get_user').then(response => {
+        if(response.body){
+          this.user = response.body
+          this.error = ''
+        }else{
           this.error = 'Failed to get user!'
           this.$store.commit('user/reset')
-          this.waiting = false
-        })
-      }
+        }
+        this.waiting = false
+      }, response => {
+        this.error = 'Failed to get user!'
+        this.$store.commit('user/reset')
+        this.waiting = false
+      })
     }
   }
 }
@@ -133,6 +160,15 @@ export default {
 .login-form {
   max-width: 600px;
   margin: auto;
+}
+
+.user-info {
+  margin-top: 20px;
+  padding: 20px;
+
+  table {
+    margin: auto;
+  }
 }
 
 </style>

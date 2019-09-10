@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import MyMain from '@/components/MyMain'
+import Account from '@/components/Account'
 import About from '@/components/About'
 
 Vue.use(Router)
@@ -9,8 +9,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'MyMain',
-      component: MyMain
+      name: 'Account',
+      component: Account
     },
     {
       path: '/about',
