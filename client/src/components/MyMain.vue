@@ -1,22 +1,47 @@
 <template>
   <div>
-    <div class="container">
-      <squeue></squeue>
-      <div class="columns">
-        <div class="column">
-          <bar-chart></bar-chart>
+    <div>
+      <center class="title is-4">Welcome to Holand Computing Center!</center>
+
+      <div class="login-form">
+        <div v-if="error" class="notification is-danger">
+          <button class="delete" @click="error=''"></button>
+          {{error}}
         </div>
-        <div class="column">
-          <pie-chart></pie-chart>
-        </div>
-      </div>
-      <div class="columns">
-        <div class="column is-half">
-          <div class="echart-figure">
-            <v-chart :options="option" autoresize />
+
+        <div class="field">
+          <label class="label">Username</label>
+          <div class="control has-icons-left">
+            <input class="input" type="text" placeholder="HCC username">
+            <span class="icon is-small is-left">
+              <v-icon name="user"/>
+            </span>
           </div>
         </div>
-        <div class="column is-half">
+
+        <div class="field">
+          <label class="label">Password</label>
+          <div class="control has-icons-left">
+            <input class="input" type="password" placeholder="password">
+            <span class="icon is-small is-left">
+              <v-icon name="lock"/>
+            </span>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="control">
+            <label class="checkbox">
+              <input type="checkbox">
+              Remember me
+            </label>
+          </div>
+        </div>
+
+        <div class="field is-grouped">
+          <div class="control">
+            <button class="button is-link" :class="{'is-loading': waiting}" @click="login">Submit</button>
+          </div>
         </div>
       </div>
     </div>
@@ -24,57 +49,47 @@
 </template>
 
 <script>
-import BarChart from './charts/BarChart'
-import PieChart from './charts/PieChart'
-import Squeue from './Squeue'
 
 export default {
   name: 'my-main',
-  components: {
-    BarChart,
-    PieChart,
-    Squeue
-  },
   data () {
     return {
-      option: {
-        title: {
-          text: '饼图程序调用高亮示例',
-          x: 'center'
-        },
-        tooltip: {
-          trigger: 'item',
-          formatter: '{a} <br/>{b} : {c} ({d}%)'
-        },
-        legend: {
-          orient: 'vertical',
-          left: 'left',
-          data: ['直接访问', '邮件营销', '联盟广告', '视频广告', '搜索引擎'],
-        },
-        series: [
-          {
-            name: '访问来源',
-            type: 'pie',
-            radius: '65%',
-            center: ['50%', '60%'],
-            data: [
-              { value: 335, name: '直接访问' },
-              { value: 310, name: '邮件营销' },
-              { value: 234, name: '联盟广告' },
-              { value: 135, name: '视频广告' },
-              { value: 1548, name: '搜索引擎' }
-            ],
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
-            }
-          }
-        ]
-      }
+      username: '',
+      password: '',
+      rememberMe: false,
+      error: '',
+      waiting: false,
+      user: null
     }
+  },
+  methods: {
+    login () {
+      this.username = this.username.trim()
+      this.waiting = true
+      var message = {username: this.username, password: this.password}
+      this.$http.post('http://129.93.241.22:8000/myapp/login_user', message).then(response => {
+        if(response.body.user){
+          this.user = response.body.user
+          var session = response.body.session
+          Vue.http.headers.common['Authorization'] = session.token
+          this.$store.commit('user/setToken', session.token)
+          this.$store.commit('user/setUsername', session.uid)
+          if (this.rememberMe) {
+            localStorage.setItem('token', session.token)
+            localStorage.setItem('username', session.uid)
+          }
+          this.error = ''
+        }else{
+          this.error = 'Failed to authorize user!'
+          this.$store.commit('user/reset')
+        }
+        this.waiting = false
+      }, response => {
+        this.error = 'Failed to authorize user!'
+        this.$store.commit('user/reset')
+        this.waiting = false
+      })
+    },
   }
 }
 </script>
@@ -82,22 +97,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 
-.echart-figure{
-  display: inline-block;
-  position: relative;
-  margin: 2em auto;
-  border: 1px solid rgba(0, 0, 0, .1);
-  border-radius: 8px;
-  box-shadow: 0 0 45px rgba(0, 0, 0, .2);
-  padding: 1.5em 2em;
-  width: 100%;
-  min-width: calc(40vw + 4em);
-
-  .echarts {
-    width: 100%;
-    min-width: 400px;
-    height: 300px;
-  }
+.login-form {
+  max-width: 600px;
+  margin: auto;
 }
 
 </style>

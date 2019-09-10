@@ -1,10 +1,10 @@
 <template>
   <div>
-    <nav class="navbar has-shadow">
+    <nav class="navbar has-shadow is-fixed-top">
       <div class="container">
         <div class="navbar-brand">
           <router-link class="navbar-item is-size-4 has-text-weight-bold has-text-black" :to="'/'">
-            HCC Jobs
+            MY HCC
           </router-link>
           <div class="navbar-burger burger app-burger" :class="{'is-active': menuActive}"
             @click="menuActive = !menuActive">
@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="navbar-menu" :class="{'is-active': menuActive}">
-          <div class="navbar-start">
+          <!--<div class="navbar-start">
             <router-link class="navbar-item" :to="'/about'">
               About
             </router-link>
@@ -26,7 +26,7 @@
             <a class="navbar-item" v-if="token">
               <v-icon name="sign-out-alt"/>&nbsp;Logout
             </a>
-          </div>
+          </div>-->
         </div>
       </div>
     </nav>

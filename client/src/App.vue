@@ -1,10 +1,20 @@
 <template>
   <div id="app">
     <my-header></my-header>
-    <div class="my-body">
-      <router-view></router-view>
+    <div class="my-body container">
+      <div class="columns">
+        <div class="column is-narrow">
+          <my-menu></my-menu>
+        </div>
+        <div class="column is-paddingless">
+          <div class="main-column">
+            <div class="main-content">
+              <router-view></router-view>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <my-footer></my-footer>
 
     <confirm-modal></confirm-modal>
   </div>
@@ -13,14 +23,14 @@
 <script>
 import Vue from 'vue'
 import MyHeader from './components/MyHeader'
-import MyFooter from './components/MyFooter'
+import MyMenu from './components/MyMenu'
 import ConfirmModal from './components/modals/ConfirmModal'
 
 export default {
   name: 'App',
   components: {
     MyHeader,
-    MyFooter,
+    MyMenu,
     ConfirmModal,
   },
   computed: {
@@ -50,13 +60,23 @@ export default {
 
 <style lang="scss">
 @import "~bulma/sass/utilities/initial-variables";
-$navbar-height: 84px;
+
 @import "~bulma";
 @import "~c3/c3";
 
 .my-body {
   margin-top: 15px;
   min-height: 640px;
+}
+
+.main-column {
+  height: calc(100vh - 52px);
+  overflow-y: auto;
+
+  .main-content {
+    padding: 12px;
+    padding-top: 20px;
+  }
 }
 
 .date-picker-wrapper {

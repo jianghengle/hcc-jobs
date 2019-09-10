@@ -25,7 +25,7 @@ class MySession(models.Model):
     def create(uid):
         session = MySession()
         session.uid = uid
-        session.session_token = random_string_digits(128)
+        session.session_token = random_string_digits(64)
         session.active_at = timezone.now()
         session.save()
         return session

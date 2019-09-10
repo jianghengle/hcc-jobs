@@ -14,5 +14,5 @@ urlpatterns = [
 
     path('get_csv/<filename>', csv_file_view.get_csv, name='get_csv'),
     path('request_squeue', squeue_view.request_squeue, name='request_squeue'),
-    path('verify_user', account_view.verify_user, name='verify_user')
+    path('login_user', account_view.login_user, name='login_user')
 ]
