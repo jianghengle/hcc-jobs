@@ -85,6 +85,7 @@ export default {
     logoutConfirmed () {
       delete Vue.http.headers.common['Authorization']
       this.$store.commit('user/reset')
+      this.$router.push('/')
     },
   }
 }

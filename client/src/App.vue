@@ -3,7 +3,7 @@
     <my-header></my-header>
     <div class="my-body container">
       <div class="columns">
-        <div class="column is-narrow is-paddingless">
+        <div class="column is-narrow is-paddingless is-hidden-mobile">
           <div class="main-column">
             <my-menu></my-menu>
           </div>
@@ -78,6 +78,10 @@ export default {
   .main-content {
     padding: 20px;
   }
+}
+
+.clickable {
+  cursor: pointer;
 }
 
 .date-picker-wrapper {
