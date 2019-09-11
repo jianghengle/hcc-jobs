@@ -4,7 +4,7 @@
     <div>
 
       <div>Jobs in Queue: </div>
-      <div v-if="error" class="notification is-danger">
+      <div v-if="queueError" class="notification is-danger">
         <button class="delete" @click="queueError=''"></button>
         {{queueError}}
       </div>
@@ -55,12 +55,12 @@ export default {
         }
         this.waiting = false
       }, response => {
-        this.error = 'Failed to get squeue!'
+        this.queueError = 'Failed to get squeue!'
       })
     }
   },
   mounted () {
-    
+    this.requestQueueJobs()
   },
 }
 </script>
