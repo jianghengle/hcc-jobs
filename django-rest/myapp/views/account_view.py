@@ -5,7 +5,7 @@ from ..models import MySession
 from ..models.my_user import MyUser
 from . import check_session
 
-@api_view(['Post'])
+@api_view(['POST'])
 def login_user(request):
     username = request.data['username']
     password = request.data['password']
@@ -18,7 +18,7 @@ def login_user(request):
         return Response({'user': None})
 
 
-@api_view(['Get'])
+@api_view(['GET'])
 def get_user(request):
     user = check_session(request)
     return Response(user.json())
