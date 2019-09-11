@@ -4,6 +4,6 @@ from ..models.squeue import Squeue
 
 @api_view(['GET'])
 def get_squeue(request):
-	user = check_session(request)
+    user = check_session(request)
     squeue = Squeue(user.username)
     return Response(squeue.json())
