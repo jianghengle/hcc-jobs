@@ -7,5 +7,5 @@ urlpatterns = [
     path('login_user', account_view.login_user, name='login_user'),
     path('get_user', account_view.get_user, name='get_user'),
 
-    path('get_squeue/<slug:username>', job_view.get_squeue, name='get_squeue'),
+    path('get_squeue', job_view.get_squeue, name='get_squeue'),
 ]
