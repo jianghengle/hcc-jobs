@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Account from '@/components/Account'
-import About from '@/components/About'
+import Rhino from '@/components/Rhino'
+import Jobs from '@/components/jobs/Jobs'
 
 Vue.use(Router)
 
@@ -13,9 +14,14 @@ export default new Router({
       component: Account
     },
     {
-      path: '/about',
-      name: 'About',
-      component: About
+      path: '/rhino',
+      name: 'Rhino',
+      component: Rhino
+    },
+    {
+      path: '/:resourceName/jobs',
+      name: 'Jobs',
+      component: Jobs
     },
   ],
 })

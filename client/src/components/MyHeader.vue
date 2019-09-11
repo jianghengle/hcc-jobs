@@ -49,14 +49,6 @@ export default {
     }
   },
   methods: {
-    login () {
-      var confirm = {
-        title: 'Login',
-        message: 'Are you sure to login?',
-        button: 'Yes, I am sure.',
-      }
-      this.$store.commit('modals/openConfirmModal', confirm)
-    }
   },
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
-  <div>
+  <div class="menu-container">
     <aside class="menu my-menu">
       <p class="menu-label">
         Account
       </p>
       <ul class="menu-list">
-        <li><a :class="{'is-active': routeName=='Account'}">{{username ? username : 'Login'}}</a></li>
+        <li><router-link :to="'/'" :class="{'is-active': routeName=='Account'}">{{username ? username : 'Login'}}</router-link></li>
         <li v-if="username"><a @click="logout">Logout</a></li>
       </ul>
       <p class="menu-label">
@@ -13,19 +13,17 @@
       </p>
       <ul class="menu-list">
         <li>
-          <a>Rhino</a>
+          <router-link :to="'/rhino'" :class="{'is-active': routePath=='/rhino'}">Rhino</router-link>
           <ul>
-            <li><a>Jobs</a></li>
-            <li><a>Home Directory</a></li>
-            <li><a>Work Directory</a></li>
+            <li><router-link :to="'/rhino/jobs'" :class="{'is-active': routePath=='/rhino/jobs'}">Jobs</router-link ></li>
+            <li><a>File System</a></li>
           </ul>
         </li>
         <li>
           <a>Crane</a>
           <ul>
             <li><a>Jobs</a></li>
-            <li><a>Home Directory</a></li>
-            <li><a>Work Directory</a></li>
+            <li><a>File System</a></li>
           </ul>
         </li>
         <li>
@@ -66,6 +64,9 @@ export default {
     routeName () {
       return this.$route.name
     },
+    routePath () {
+      return this.$route.path
+    },
   },
   methods: {
     logout () {
@@ -91,9 +92,13 @@ export default {
 
 <style lang="scss" scoped>
 
-.my-menu {
-  width: 200px;
-  padding-top: 20px;
+.menu-container {
+  padding: 20px;
+
+  .my-menu {
+    width: 200px;
+  }
 }
+
 
 </style>

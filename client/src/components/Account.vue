@@ -121,6 +121,8 @@ export default {
             localStorage.setItem('username', session.uid)
           }
           this.error = ''
+          this.username = ''
+          this.password = ''
         }else{
           this.error = 'Failed to authorize user!'
           this.$store.commit('user/reset')
@@ -164,7 +166,6 @@ export default {
 
 .user-info {
   margin-top: 20px;
-  padding: 20px;
 
   table {
     margin: auto;

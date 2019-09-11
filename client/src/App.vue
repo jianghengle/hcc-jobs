@@ -3,8 +3,10 @@
     <my-header></my-header>
     <div class="my-body container">
       <div class="columns">
-        <div class="column is-narrow">
-          <my-menu></my-menu>
+        <div class="column is-narrow is-paddingless">
+          <div class="main-column">
+            <my-menu></my-menu>
+          </div>
         </div>
         <div class="column is-paddingless">
           <div class="main-column">
@@ -66,7 +68,7 @@ export default {
 
 .my-body {
   margin-top: 15px;
-  min-height: 640px;
+  height: calc(100vh - 52px);
 }
 
 .main-column {
@@ -74,8 +76,7 @@ export default {
   overflow-y: auto;
 
   .main-content {
-    padding: 12px;
-    padding-top: 20px;
+    padding: 20px;
   }
 }
 
