@@ -1,18 +1,30 @@
 <template>
   <div>
-    <h1 class="title my-title">{{resourceName}}</h1>
+    <div class="buttons">
+      <router-link class="button" :to="'/'+resourceName+'/jobs'">
+        <span class="icon">
+          <v-icon name="chevron-left"/>
+        </span>
+        <span class="my-title">All {{resourceName}} Jobs</span>
+      </router-link>
+    </div>
 
     <div v-if="!token" class="notification is-danger">
       You need to login first to see the job detail!
     </div>
 
-    <div class="title is-5">
-      <span>Job: {{jobId}}</span>
-    </div>
-
     <div v-if="jobError" class="notification is-danger">
       <button class="delete" @click="jobError=''"></button>
       {{jobError}}
+    </div>
+
+    <div v-if="jobDetail">
+      <div class="columns is-multiline">
+        <div class="column is-one-quarter" v-for="(f, i) in jobDetail.fields">
+          <span class="has-text-weight-bold">{{f}}</span>:
+          <span class="my-value">{{jobDetail.values[i]}}</span>
+        </div>
+      </div>
     </div>
 
   </div>
@@ -56,9 +68,20 @@ export default {
   methods: {
     requestJob () {
       this.$http.get(this.server + '/myapp/get_job_detail/' + this.jobId).then(response => {
-        console.log(this.response.body)
+        console.log(response.body)
         if(response.body.timestamp){
           this.queueError = ''
+          if(this.jobDetail){
+            this.jobDetail.timestamp = response.body.timestamp
+            this.jobDetail.fields = response.body.fields
+            this.jobDetail.values = response.body.values
+          }else{
+            this.jobDetail = {
+              timestamp: response.body.timestamp,
+              fields: response.body.fields,
+              values: response.body.values
+            }
+          }
         }else{
           this.queueError = 'Failed to get job detail!'
         }
@@ -88,5 +111,7 @@ export default {
   text-transform: capitalize;
 }
 
-
+.my-value {
+  word-break: break-word;
+}
 </style>

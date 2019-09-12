@@ -10,6 +10,7 @@ Vue.use(VueResource)
 import 'vue-awesome/icons/user'
 import 'vue-awesome/icons/lock'
 import 'vue-awesome/icons/sync'
+import 'vue-awesome/icons/chevron-left'
 import Icon from 'vue-awesome/components/Icon'
 Vue.component('v-icon', Icon)
 
