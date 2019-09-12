@@ -55,10 +55,9 @@ export default {
   },
   methods: {
     requestJob () {
-      this.$http.get(this.server + '/myapp/get_squeue').then(response => {
-        if(response.body.job){
-          
-
+      this.$http.get(this.server + '/myapp/get_job_detail/' + this.jobId).then(response => {
+        console.log(this.response.body)
+        if(response.body.timestamp){
           this.queueError = ''
         }else{
           this.queueError = 'Failed to get job detail!'
