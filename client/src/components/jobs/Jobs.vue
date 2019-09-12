@@ -9,22 +9,14 @@
     <div v-if="queueResult">
       <div class="title is-5">
         <span class="squeue-time">
-          @{{queueTimeLabel}}&nbsp;
-          <div class="field squeue-rate">
-            <div class="control has-icons-left">
-              <div class="select">
-                <select v-model="queueRate">
-                  <option value="5000">5 sec</option>
-                  <option value="60000">1 min</option>
-                </select>
-              </div>
-              <div class="icon is-small is-left">
-                <v-icon name="sync"/>
-              </div>
-            </div>
-          </div>
+          <a class="button" :class="{'is-loading': waiting}" @click="requestQueueJobs">
+            <span class="icon">
+              <v-icon name="sync"/>
+            </span>
+            <span>{{queueTimeLabel}}</span>
+          </a>
         </span>
-        <span>Jobs in Queue: {{queueJobs.length}}</span>&nbsp;
+        <span>Jobs in Queue: {{queueJobs.length}}</span>
       </div>
 
       <div v-if="queueError" class="notification is-danger">
@@ -37,13 +29,19 @@
           <thead>
             <tr>
               <th>#</th>
-              <th v-for="h in queueHeader">{{h}}</th>
+              <th v-for="h in queueHeader">{{h == 'ST' ? 'STATE' : h}}</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(job, i) in queueJobs" class="clickable">
+            <tr v-for="(job, i) in queueJobs" class="clickable" @click="viewJob(job)">
               <th>{{i+1}}</th>
-              <td v-for="(cell, j) in job" :class="{'node-list': j==job.length-1}">{{cell}}</td>
+              <td v-for="(cell, j) in job" :class="{'node-list': j==job.length-1}">
+                <span v-if="j==4"
+                  :class="{'has-text-success': jobStates[cell][1]==0, 'has-text-warning': jobStates[cell][1]==1, 'has-text-danger': jobStates[cell][1]==2}">
+                  {{jobStates[cell][0]}}
+                </span>
+                <span v-else>{{cell}}</span>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -62,8 +60,33 @@ export default {
       queueError: '',
       queueTime: null,
       queueResult: null,
-      queueRate: 60000,
-      queueInterval: null
+      waiting: false,
+      jobStates: {
+        BF: ['BOOT_FAIL', 2],
+        CA: ['CANCELLED', 2],
+        CD: ['COMPLETED', 0],
+        CF: ['CONFIGURING', 1],
+        CG: ['COMPLETING', 0],
+        DL: ['DEADLINE', 2],
+        F: ['FAILED', 2],
+        NF: ['NODE_FAIL', 2],
+        OOM: ['OUT_OF_MEMORY', 2],
+        PD: ['PENDING', 1],
+        PR: ['PREEMPTED', 2],
+        R: ['RUNNING', 0],
+        RD: ['RESV_DEL_HOLD', 1],
+        RF: ['REQUEUE_FED', 1],
+        RH: ['REQUEUE_HOLD', 1],
+        RQ: ['REQUEUED', 1],
+        RS: ['RESIZING', 1],
+        RV: ['REVOKED', 2],
+        SI: ['SIGNALING', 1],
+        SE: ['SPECIAL_EXIT', 2],
+        SO: ['STAGE_OUT', 1],
+        ST: ['STOPPED', 2],
+        S: ['SUSPENDED', 1],
+        TO: ['TIMEOUT', 2]
+      }
     }
   },
   computed: {
@@ -84,7 +107,7 @@ export default {
     },
     queueHeader () {
       if(this.queueResult){
-        return this.queueResult.split('\n')[0].split(/\ +/)
+        return this.queueResult.split('\n')[0].split(/\ +/).map(item => item.trim())
       }
       return []
     },
@@ -99,23 +122,16 @@ export default {
   },
   watch: {
     resourceName: function (val) {
-      this.queueResult = null
+      this.requestQueueJobs()
     },
-    queueRate: function (val) {
-      if(this.queueInterval){
-        clearInterval(this.queueInterval)
-        this.queueInterval = null
-      }
-      this.queueInterval = setInterval(this.requestQueueJobs, this.queueRate)
-    }
   },
   methods: {
     requestQueueJobs () {
+      this.waiting = true
       this.$http.get(this.server + '/myapp/get_squeue').then(response => {
         if(response.body.result){
           this.queueTime = new Date(response.body.timestamp * 1000)
           this.queueResult = response.body.result
-
           this.queueError = ''
         }else{
           this.queueError = 'Failed to get squeue!'
@@ -123,21 +139,16 @@ export default {
         this.waiting = false
       }, response => {
         this.queueError = 'Failed to get squeue!'
+        this.waiting = false
       })
     },
+    viewJob (job) {
+      this.$router.push('/' + this.resourceName + '/job/' + job[0])
+    }
   },
   mounted () {
     if(this.token){
       this.requestQueueJobs()
-      if(!this.queueInterval){
-        this.queueInterval = setInterval(this.requestQueueJobs, this.queueRate)
-      }
-    }
-  },
-  beforeDestroy () {
-    if(this.queueInterval){
-      clearInterval(this.queueInterval)
-      this.queueInterval = null
     }
   }
 }
@@ -150,16 +161,8 @@ export default {
 }
 
 .squeue-time {
-  font-size: 1rem;
   font-weight: normal;
-  color: hsl(0, 0%, 48%);
   float: right;
-}
-
-.squeue-rate {
-  display: inline-block;
-  position: relative;
-  top: -9px;
 }
 
 .node-list {

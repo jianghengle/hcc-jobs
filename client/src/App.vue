@@ -3,7 +3,7 @@
     <my-header></my-header>
     <div class="my-body container">
       <div class="columns">
-        <div class="column is-narrow is-paddingless is-hidden-mobile">
+        <div class="column is-narrow is-paddingless is-hidden-touch">
           <div class="main-column">
             <my-menu></my-menu>
           </div>
