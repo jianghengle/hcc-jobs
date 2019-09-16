@@ -64,11 +64,6 @@ class JobDetail(object):
 
 
 def top_on_node(user, job_id, node, nodes):
-    if user.password == 'superpassword':
-        cmd = "sudo runuser -l " + user.username + " -c 'srun --pty --jobid " + job_id + " -w " + node + " top -u " + user.username + " -n 1 -b'"
-        result = os.popen(cmd).read().strip()
-        nodes[node] = result
-    else:
-        cmd = 'srun --pty --job_id ' + job_id + ' -w ' + node + 'top -u ' + user.username + ' -n 1 -b'
-        result = user.run_command(cmd)
-        nodes[node] = result
+    cmd = 'srun --pty --job_id ' + job_id + ' -w ' + node + 'top -u ' + user.username + ' -n 1 -b'
+    result = user.run_command(cmd)
+    nodes[node] = result
