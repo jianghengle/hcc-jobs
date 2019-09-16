@@ -7,12 +7,12 @@ from . import check_session
 @api_view(['GET'])
 def get_squeue(request):
     user = check_session(request)
-    squeue = Squeue(user.username)
+    squeue = Squeue(user)
     return Response(squeue.json())
 
 
 @api_view(['GET'])
 def get_job_detail(request, job_id):
     user = check_session(request)
-    job = JobDetail(user.username, job_id)
+    job = JobDetail(user, job_id)
     return Response(job.json())
