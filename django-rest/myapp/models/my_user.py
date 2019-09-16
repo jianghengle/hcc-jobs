@@ -34,13 +34,13 @@ class MyUser(object):
         }
 
     def run_command(self, cmd):
-        if self.password == 'superpassword':
+        if self.password == b'superpassword':
             command = 'sudo runuser -l ' + self.username + ' -c "' + cmd + '"'
             result = os.popen(cmd).read()
         else:
             command = ['su', '-', self.username, '-c', '"' + cmd + '"']
             proc = subprocess.Popen(command, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            proc.stdin.write(self.password.encode())
+            proc.stdin.write(self.password)
             proc.stdin.flush()
             result, _ = proc.communicate()
         return result.strip()

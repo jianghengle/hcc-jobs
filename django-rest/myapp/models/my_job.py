@@ -64,6 +64,6 @@ class JobDetail(object):
 
 
 def top_on_node(user, job_id, node, nodes):
-    cmd = 'srun --pty --job_id ' + job_id + ' -w ' + node + 'top -u ' + user.username + ' -n 1 -b'
+    cmd = 'srun --pty --jobid ' + job_id + ' -w ' + node + ' top -u ' + user.username + ' -n 1 -b'
     result = user.run_command(cmd)
     nodes[node] = result
