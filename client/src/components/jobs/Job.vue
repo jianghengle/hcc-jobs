@@ -25,8 +25,17 @@
           <span class="my-value">{{jobDetail.values[i]}}</span>
         </div>
       </div>
-    </div>
 
+      <div>
+        <div v-for="(v, k) in jobDetail.nodes">
+          <div>{{k}}</div>
+          <div><pre>{{v}}</pre></div>
+        </div>
+      </div>
+    </div>
+    <div v-else class="has-text-centered">
+      <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
+    </div>
   </div>
 </template>
 
@@ -70,18 +79,7 @@ export default {
       this.$http.get(this.server + '/myapp/get_job_detail/' + this.jobId).then(response => {
         console.log(response.body)
         if(response.body.timestamp){
-          this.queueError = ''
-          if(this.jobDetail){
-            this.jobDetail.timestamp = response.body.timestamp
-            this.jobDetail.fields = response.body.fields
-            this.jobDetail.values = response.body.values
-          }else{
-            this.jobDetail = {
-              timestamp: response.body.timestamp,
-              fields: response.body.fields,
-              values: response.body.values
-            }
-          }
+          this.jobDetail = response.body
         }else{
           this.queueError = 'Failed to get job detail!'
         }

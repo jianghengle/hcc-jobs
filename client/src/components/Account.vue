@@ -113,11 +113,12 @@ export default {
         if(response.body.user){
           this.user = response.body.user
           var session = response.body.session
-          Vue.http.headers.common['Authorization'] = session.token
-          this.$store.commit('user/setToken', session.token)
+          var token = session.token + '$' + btoa(this.password)
+          Vue.http.headers.common['Authorization'] = token
+          this.$store.commit('user/setToken', token)
           this.$store.commit('user/setUsername', session.uid)
           if (this.rememberMe) {
-            localStorage.setItem('token', session.token)
+            localStorage.setItem('token', token)
             localStorage.setItem('username', session.uid)
           }
           this.error = ''

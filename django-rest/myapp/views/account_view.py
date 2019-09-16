@@ -10,8 +10,8 @@ def login_user(request):
     username = request.data['username']
     password = request.data['password']
     try:
-        user = MyUser(username)
-        user.verify_password(password)
+        user = MyUser(username, password)
+        user.verify_password()
         session = MySession.create(username)
         return Response({'user': user.json(), 'session': session.json()})
     except:
