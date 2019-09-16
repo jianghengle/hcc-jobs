@@ -1,5 +1,6 @@
 import ldap
 import os
+import subprocess
 
 class MyUser(object):
     def __init__(self, username, password):
@@ -31,3 +32,11 @@ class MyUser(object):
             'description': user['description'][0],
             'groups': groups
         }
+
+    def run_command(self, cmd):
+        command = ['su', '-', self.username, '-c', '"' + cmd + '"']
+        proc = subprocess.Popen(args, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc.stdin.write(self.password.encode())
+        proc.stdin.flush()
+        stdout, stderr = proc.communicate()
+        return stdout.strip()

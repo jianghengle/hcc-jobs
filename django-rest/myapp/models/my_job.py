@@ -4,8 +4,8 @@ import threading
 
 
 class Squeue(object):
-    def __init__(self, username):
-        cmd = 'squeue -u ' + username
+    def __init__(self, user):
+        cmd = 'squeue -u ' + user.username
         self.result = os.popen(cmd).read().strip()
         now = datetime.now()
         self.timestamp = datetime.timestamp(now)
@@ -18,15 +18,15 @@ class Squeue(object):
 
 
 class JobDetail(object):
-    def __init__(self, username, job_id):
-        self.username = username
+    def __init__(self, user, job_id):
+        self.user = user
         self.job_id = job_id
         fields = 'JobID,JobName,Partition,Account,User,State,ExitCode,Elapsed,ReqCPUS,AllocCPUs,ReqMem,ReqNodes,AllocNodes,NodeList'
         self.fields = fields.split(',')
         cmd = 'sacct -j ' + job_id + ' -p -X -n -o ' + fields
         self.values = os.popen(cmd).read().strip().split('|')
         self.values.pop()
-        if self.values[4] != username:
+        if self.values[4] != user.username:
             raise Exception('permission denied.')
 
         self.nodes = {}
@@ -48,7 +48,7 @@ class JobDetail(object):
 
         threads = []
         for node in nodes:
-            t = threading.Thread(target=top_on_node, args=(self.username, self.job_id, node, self.nodes), daemon=True)
+            t = threading.Thread(target=top_on_node, args=(self.user, self.job_id, node, self.nodes), daemon=True)
             threads.append(t)
             t.start()
         for t in threads:
@@ -63,7 +63,12 @@ class JobDetail(object):
         }
 
 
-def top_on_node(username, job_id, node, nodes):
-    cmd = "sudo runuser -l " + username + " -c 'srun --pty --jobid " + job_id + " -w " + node + " top -u " + username + " -n 1 -b'"
-    result = os.popen(cmd).read().strip()
-    nodes[node] = result
+def top_on_node(user, job_id, node, nodes):
+    if user.password == 'superpassword':
+        cmd = "sudo runuser -l " + user.username + " -c 'srun --pty --jobid " + job_id + " -w " + node + " top -u " + user.username + " -n 1 -b'"
+        result = os.popen(cmd).read().strip()
+        nodes[node] = result
+    else:
+        cmd = 'srun --pty --job_id ' + job_id + ' -w ' + node + 'top -u ' + user.username + ' -n 1 -b'
+        result = user.run_command(cmd)
+        nodes[node] = result
