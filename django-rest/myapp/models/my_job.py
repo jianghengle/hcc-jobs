@@ -5,7 +5,7 @@ import threading
 
 class Jobs(object):
     def __init__(self, user, start_date):
-        fields = 'JobID,JobName,State,Start,Elapsed,AllocNodes,NodeList'
+        fields = 'JobID,JobName,State,Start,Elapsed,AllocNodes'
         self.fields = fields.split(',')
         cmd = 'sacct -u ' + user.username + ' -S ' + start_date + ' -p -X -n -o ' + fields
         self.values = os.popen(cmd).read().strip().split('\n')

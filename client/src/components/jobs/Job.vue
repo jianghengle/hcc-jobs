@@ -21,7 +21,13 @@
     <div v-if="jobDetail">
       <table class="table is-fullwidth">
         <thead>
-          <tr><th class="is-size-5">Job Detail</th></tr>
+          <tr><th class="is-size-5"
+            :class="{
+              'has-text-success': jobStates[jobState] && jobStates[jobState][1]==0,
+              'has-text-warning': jobStates[jobState] && jobStates[jobState][1]==1,
+              'has-text-danger': !jobStates[jobState] || jobStates[jobState][1]==2}">
+            Job {{jobId}} ({{jobState}})
+          </th></tr>
         </thead>
         <tbody>
           <tr>
@@ -33,7 +39,7 @@
                 </div>
                 <div class="field">
                   <label class="label">{{jobDetail.fields[jobDetail.fields.length-1]}}</label>
-                  <div class="control">{{jobDetail.values[jobDetail.fields.length-1]}}</div>
+                  <div class="control nodes-value">{{jobDetail.values[jobDetail.fields.length-1]}}</div>
                 </div>
               </div>
             </td>
@@ -108,6 +114,9 @@ export default {
     },
     server () {
       return this.$store.state.info.servers[this.resourceName]
+    },
+    jobStates () {
+      return this.$store.state.info.jobStates
     },
     jobState () {
       if(this.jobDetail)
@@ -241,7 +250,7 @@ export default {
   text-transform: capitalize;
 }
 
-.my-value {
+.nodes-value {
   word-break: break-word;
 }
 
