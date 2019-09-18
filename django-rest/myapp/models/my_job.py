@@ -24,7 +24,7 @@ class JobDetail(object):
     def __init__(self, user, job_id):
         self.user = user
         self.job_id = job_id
-        fields = 'JobID,JobName,Partition,Account,User,State,Start,Elapsed,ReqCPUS,AllocCPUs,ReqMem,ReqNodes,AllocNodes,NodeList'
+        fields = 'JobID,JobName,Partition,Account,User,State,Start,End,Elapsed,ReqCPUS,AllocCPUs,ReqMem,ReqNodes,AllocNodes,NodeList'
         self.fields = fields.split(',')
         cmd = 'sacct -j ' + job_id + ' -p -X -n -o ' + fields
         self.values = os.popen(cmd).read().strip().split('|')

@@ -26,10 +26,14 @@
         <tbody>
           <tr>
             <td>
-              <div class="columns is-multiline detail-block">
-                <div class="column is-one-quarter" v-for="(f, i) in jobDetail.fields">
-                  <span class="has-text-weight-bold">{{f}}</span>:
-                  <span class="my-value">{{jobDetail.values[i]}}</span>
+              <div>
+                <div v-for="(f, i) in jobDetail.fields" class="field detail-item" v-if="i != jobDetail.fields.length-1">
+                  <label class="label">{{f}}</label>
+                  <div class="control detail-value">{{jobDetail.values[i]}}</div>
+                </div>
+                <div class="field">
+                  <label class="label">{{jobDetail.fields[jobDetail.fields.length-1]}}</label>
+                  <div class="control">{{jobDetail.values[jobDetail.fields.length-1]}}</div>
                 </div>
               </div>
             </td>
@@ -243,6 +247,17 @@ export default {
 
 .detail-block {
   margin-top: -5px;
+}
+
+.detail-item {
+  display: inline-block;
+  width: 165px;
+  padding-right: 15px;
+
+  .detail-value {
+    white-space: nowrap;
+    overflow: auto;
+  }
 }
 
 .node-row {
