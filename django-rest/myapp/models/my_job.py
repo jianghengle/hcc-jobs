@@ -70,3 +70,13 @@ def top_on_node(user, job_id, node, nodes):
     cmd = 'srun --pty --jobid ' + job_id + ' -w ' + node + ' top -u ' + user.username + ' -n 1 -b'
     result = user.run_command(cmd)
     nodes[node] = result
+
+
+class Job(object):
+    def __init__(self, user, job_id):
+        self.user = user
+        self.job_id = job_id
+
+    def cancel_job(self):
+        cmd = 'scancel ' + self.job_id
+        self.user.run_command(cmd)

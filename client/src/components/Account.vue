@@ -22,7 +22,7 @@
         <div class="field">
           <label class="label">Password</label>
           <div class="control has-icons-left">
-            <input class="input" type="password" placeholder="password" v-model="password">
+            <input class="input" type="password" placeholder="password" v-model="password" @keyup.enter="login">
             <span class="icon is-small is-left">
               <v-icon name="lock"/>
             </span>

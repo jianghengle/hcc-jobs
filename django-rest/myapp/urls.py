@@ -9,4 +9,5 @@ urlpatterns = [
 
     path('get_jobs/<str:start_date>', job_view.get_jobs, name='get_jobs'),
     path('get_job_detail/<str:job_id>/', job_view.get_job_detail, name='get_job_detail'),
+    path('cancel_job', job_view.cancel_job, name='cancel_job'),
 ]

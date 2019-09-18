@@ -26,6 +26,7 @@
               'has-text-success': jobStates[jobState] && jobStates[jobState][1]==0,
               'has-text-warning': jobStates[jobState] && jobStates[jobState][1]==1,
               'has-text-danger': !jobStates[jobState] || jobStates[jobState][1]==2}">
+            <a class="button cancel-button is-danger" v-if="jobStates[jobState] && jobStates[jobState][2]" @click="cancelJob">Cancel Job</a>
             Job {{jobId}} ({{jobState}})
           </th></tr>
         </thead>
@@ -136,7 +137,6 @@ export default {
         }else{
           this.queueError = 'Failed to get job detail!'
         }
-        this.waiting = false
       }, response => {
         this.queueError = 'Failed to get job detail!'
       })
@@ -228,6 +228,31 @@ export default {
         yAxis: { type: 'value' },
         series: resSeries
       }
+    },
+    cancelJob () {
+      var confirm = {
+        title: 'Cancel Job',
+        message: 'Are you sure to cancel this job?',
+        button: 'Yes, I am sure.',
+        callback: {
+          context: this,
+          method: this.cancelJobConfirmed,
+          args: []
+        }
+      }
+      this.$store.commit('modals/openConfirmModal', confirm)
+    },
+    cancelJobConfirmed () {
+      var message = {jobId: this.jobId}
+      this.$http.post(this.server + '/myapp/cancel_job', message).then(response => {
+        if(response.body.ok){
+          console.log('cancelled')
+        }else{
+          this.queueError = 'Failed to cancel job!'
+        }
+      }, response => {
+        this.queueError = 'Failed to cancel job!'
+      })
     }
   },
   mounted () {
@@ -275,5 +300,10 @@ export default {
 
 .echarts {
   width: 100%;
+}
+
+.cancel-button {
+  float: right;
+  font-weight: normal;
 }
 </style>
