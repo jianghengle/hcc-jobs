@@ -1,14 +1,14 @@
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
-from ..models.my_job import Squeue, JobDetail
+from ..models.my_job import Jobs, JobDetail
 from . import check_session
 
 
 @api_view(['GET'])
-def get_squeue(request):
+def get_jobs(request, start_date):
     user = check_session(request)
-    squeue = Squeue(user)
-    return Response(squeue.json())
+    jobs = Jobs(user, start_date)
+    return Response(jobs.json())
 
 
 @api_view(['GET'])

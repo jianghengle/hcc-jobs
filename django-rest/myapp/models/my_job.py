@@ -3,17 +3,21 @@ from datetime import datetime
 import threading
 
 
-class Squeue(object):
-    def __init__(self, user):
-        cmd = 'squeue -u ' + user.username
-        self.result = os.popen(cmd).read().strip()
+class Jobs(object):
+    def __init__(self, user, start_date):
+        fields = 'JobID,JobName,State,Start,Elapsed,AllocNodes,NodeList'
+        self.fields = fields.split(',')
+        cmd = 'sacct -u ' + user.username + ' -S ' + start_date + ' -p -X -n -o ' + fields
+        self.values = os.popen(cmd).read().strip()
+        self.values.pop()
         now = datetime.now()
         self.timestamp = datetime.timestamp(now)
 
     def json(self):
         return {
             "timestamp": self.timestamp,
-            "result": self.result
+            "fields": self.fields,
+            "values": self.values,
         }
 
 
