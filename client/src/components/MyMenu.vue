@@ -27,9 +27,6 @@
           </ul>
         </li>
         <li>
-          <a>Common Directory</a>
-        </li>
-        <li>
           <a>Anvil</a>
         </li>
         <li>

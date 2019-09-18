@@ -134,6 +134,10 @@ export default {
           if(this.jobInterval === undefined && this.jobState == 'RUNNING'){
             this.jobInterval = setInterval(this.requestJob, 2000)
           }
+          if(this.jobState != 'RUNNING' && this.jobInterval){
+            clearInterval(this.jobInterval)
+            this.jobInterval = null
+          }
         }else{
           this.queueError = 'Failed to get job detail!'
         }
@@ -245,9 +249,7 @@ export default {
     cancelJobConfirmed () {
       var message = {jobId: this.jobId}
       this.$http.post(this.server + '/myapp/cancel_job', message).then(response => {
-        if(response.body.ok){
-          console.log('cancelled')
-        }else{
+        if(!response.body.ok){
           this.queueError = 'Failed to cancel job!'
         }
       }, response => {
