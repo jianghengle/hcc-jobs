@@ -8,8 +8,7 @@ class Jobs(object):
         fields = 'JobID,JobName,State,Start,Elapsed,AllocNodes,NodeList'
         self.fields = fields.split(',')
         cmd = 'sacct -u ' + user.username + ' -S ' + start_date + ' -p -X -n -o ' + fields
-        self.values = os.popen(cmd).read().strip()
-        self.values.pop()
+        self.values = os.popen(cmd).read().strip().split('\n')
         now = datetime.now()
         self.timestamp = datetime.timestamp(now)
 
@@ -25,7 +24,7 @@ class JobDetail(object):
     def __init__(self, user, job_id):
         self.user = user
         self.job_id = job_id
-        fields = 'JobID,JobName,Partition,Account,User,State,ExitCode,Elapsed,ReqCPUS,AllocCPUs,ReqMem,ReqNodes,AllocNodes,NodeList'
+        fields = 'JobID,JobName,Partition,Account,User,State,Start,Elapsed,ReqCPUS,AllocCPUs,ReqMem,ReqNodes,AllocNodes,NodeList'
         self.fields = fields.split(',')
         cmd = 'sacct -j ' + job_id + ' -p -X -n -o ' + fields
         self.values = os.popen(cmd).read().strip().split('|')

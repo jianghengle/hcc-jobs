@@ -98,7 +98,7 @@ export default {
   },
   computed: {
     server () {
-      return this.$store.state.servers.account
+      return this.$store.state.info.servers.account
     },
     token () {
       return this.$store.state.user.token

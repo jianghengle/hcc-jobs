@@ -19,14 +19,25 @@
     </div>
 
     <div v-if="jobDetail">
-      <div class="columns is-multiline">
-        <div class="column is-one-quarter" v-for="(f, i) in jobDetail.fields">
-          <span class="has-text-weight-bold">{{f}}</span>:
-          <span class="my-value">{{jobDetail.values[i]}}</span>
-        </div>
-      </div>
+      <table class="table is-fullwidth">
+        <thead>
+          <tr><th class="is-size-5">Job Detail</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="columns is-multiline detail-block">
+                <div class="column is-one-quarter" v-for="(f, i) in jobDetail.fields">
+                  <span class="has-text-weight-bold">{{f}}</span>:
+                  <span class="my-value">{{jobDetail.values[i]}}</span>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-      <div v-if="nodeList">
+      <div v-if="nodeList && nodeList.length">
         <table class="table is-fullwidth">
           <thead>
             <tr><th class="is-size-5">Monitor Nodes</th></tr>
@@ -73,7 +84,7 @@ export default {
     return {
       jobError: '',
       jobDetail: null,
-      jobInterval: null,
+      jobInterval: undefined,
       nodes: null,
       nodeList: null
     }
@@ -92,8 +103,13 @@ export default {
       return this.$route.params.jobId
     },
     server () {
-      return this.$store.state.servers[this.resourceName]
+      return this.$store.state.info.servers[this.resourceName]
     },
+    jobState () {
+      if(this.jobDetail)
+        return this.jobDetail.values[5]
+      return null
+    }
   },
   methods: {
     requestJob () {
@@ -101,6 +117,9 @@ export default {
         if(response.body.timestamp){
           this.jobDetail = response.body
           this.makeNodes()
+          if(this.jobInterval === undefined && this.jobState == 'RUNNING'){
+            this.jobInterval = setInterval(this.requestJob, 2000)
+          }
         }else{
           this.queueError = 'Failed to get job detail!'
         }
@@ -201,7 +220,6 @@ export default {
   mounted () {
     if(this.token){
       this.requestJob()
-      this.jobInterval = setInterval(this.requestJob, 2000)
     }
   },
   beforeDestroy () {
@@ -221,6 +239,10 @@ export default {
 
 .my-value {
   word-break: break-word;
+}
+
+.detail-block {
+  margin-top: -5px;
 }
 
 .node-row {

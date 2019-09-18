@@ -7,7 +7,7 @@
     </div>
 
     <div v-if="queueResult">
-      <div class="title is-5">
+      <div class="jobs-title">
         <span class="squeue-time">
           <a class="button" :class="{'is-loading': waiting}" @click="requestQueueJobs">
             <span class="icon">
@@ -16,7 +16,14 @@
             <span>{{queueTimeLabel}}</span>
           </a>
         </span>
-        <span>Jobs in Queue: {{queueJobs.length}}</span>
+        <span><span class="is-size-5 has-text-weight-bold">{{queueJobs.length}}</span>&nbsp;&nbsp;jobs after</span>&nbsp;
+        <datepicker
+          wrapper-class="date-picker-wrapper"
+          input-class="date-picker-input"
+          format="yyyy-MM-dd"
+          :value="date"
+          v-on:selected="dateSelected">
+        </datepicker>
       </div>
 
       <div v-if="queueError" class="notification is-danger">
@@ -24,21 +31,27 @@
         {{queueError}}
       </div>
 
-      <div>
+      <div v-if="waiting" class="has-text-centered">
+        <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
+      </div>
+      <div v-else>
         <table class="table is-fullwidth is-striped is-hoverable">
           <thead>
             <tr>
               <th>#</th>
-              <th v-for="h in queueHeader">{{h == 'ST' ? 'STATE' : h}}</th>
+              <th v-for="h in queueHeader">{{h}}</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="(job, i) in queueJobs" class="clickable" @click="viewJob(job)">
               <th>{{i+1}}</th>
               <td v-for="(cell, j) in job" :class="{'node-list': j==job.length-1}">
-                <span v-if="j==4"
-                  :class="{'has-text-success': jobStates[cell][1]==0, 'has-text-warning': jobStates[cell][1]==1, 'has-text-danger': jobStates[cell][1]==2}">
-                  {{jobStates[cell][0]}}
+                <span v-if="j==2">
+                  <span v-if="jobStates[cell]"
+                    :class="{'has-text-success': jobStates[cell][1]==0, 'has-text-warning': jobStates[cell][1]==1, 'has-text-danger': jobStates[cell][1]==2}">
+                    {{cell}}
+                  </span>
+                  <span v-else class="has-text-danger">{{cell}}</span>
                 </span>
                 <span v-else>{{cell}}</span>
               </td>
@@ -52,41 +65,20 @@
 
 <script>
 import DateFormat from 'dateformat'
+import Datepicker from 'vuejs-datepicker'
 
 export default {
   name: 'jobs',
+  components: {
+    Datepicker
+  },
   data () {
     return {
       queueError: '',
       queueTime: null,
       queueResult: null,
       waiting: false,
-      jobStates: {
-        BF: ['BOOT_FAIL', 2],
-        CA: ['CANCELLED', 2],
-        CD: ['COMPLETED', 0],
-        CF: ['CONFIGURING', 1],
-        CG: ['COMPLETING', 0],
-        DL: ['DEADLINE', 2],
-        F: ['FAILED', 2],
-        NF: ['NODE_FAIL', 2],
-        OOM: ['OUT_OF_MEMORY', 2],
-        PD: ['PENDING', 1],
-        PR: ['PREEMPTED', 2],
-        R: ['RUNNING', 0],
-        RD: ['RESV_DEL_HOLD', 1],
-        RF: ['REQUEUE_FED', 1],
-        RH: ['REQUEUE_HOLD', 1],
-        RQ: ['REQUEUED', 1],
-        RS: ['RESIZING', 1],
-        RV: ['REVOKED', 2],
-        SI: ['SIGNALING', 1],
-        SE: ['SPECIAL_EXIT', 2],
-        SO: ['STAGE_OUT', 1],
-        ST: ['STOPPED', 2],
-        S: ['SUSPENDED', 1],
-        TO: ['TIMEOUT', 2]
-      }
+      date: new Date(),
     }
   },
   computed: {
@@ -100,22 +92,32 @@ export default {
       return this.$route.params.resourceName
     },
     server () {
-      return this.$store.state.servers[this.resourceName]
+      return this.$store.state.info.servers[this.resourceName]
+    },
+    jobStates () {
+      return this.$store.state.info.jobStates
     },
     queueTimeLabel () {
       return DateFormat(this.queueTime, "h:MM:ss")
     },
     queueHeader () {
       if(this.queueResult){
-        return this.queueResult.split('\n')[0].split(/\ +/).map(item => item.trim())
+        return this.queueResult.fields
       }
       return []
     },
     queueJobs () {
       if(this.queueResult){
-        return this.queueResult.split('\n').slice(1).map(function(r){
-          return r.trim().split(/\ +/).map(item => item.trim())
+        var jobs = this.queueResult.values.map(function(r){
+          var job = r.trim().split('|')
+          job.pop()
+          job[3] = job[3].replace('T', ' ')
+          return job
         })
+        jobs.sort(function(a, b){
+          return b[3].localeCompare(a[3])
+        })
+        return jobs
       }
       return []
     },
@@ -128,25 +130,34 @@ export default {
   methods: {
     requestQueueJobs () {
       this.waiting = true
-      this.$http.get(this.server + '/myapp/get_squeue').then(response => {
-        if(response.body.result){
+      var date = DateFormat(this.date, 'yyyy-mm-dd')
+      this.$http.get(this.server + '/myapp/get_jobs/' + date).then(response => {
+        if(response.body.timestamp){
           this.queueTime = new Date(response.body.timestamp * 1000)
-          this.queueResult = response.body.result
+          this.queueResult = response.body
           this.queueError = ''
         }else{
-          this.queueError = 'Failed to get squeue!'
+          this.queueError = 'Failed to get jobs!'
         }
         this.waiting = false
       }, response => {
-        this.queueError = 'Failed to get squeue!'
+        this.queueError = 'Failed to get jobs!'
         this.waiting = false
       })
     },
     viewJob (job) {
       this.$router.push('/' + this.resourceName + '/job/' + job[0])
-    }
+    },
+    dateSelected (newDate) {
+      this.date = newDate
+      this.requestQueueJobs()
+      this.$store.commit('info/setStartDate', newDate)
+    },
   },
   mounted () {
+    if(this.$store.state.info.startDate){
+      this.date = this.$store.state.info.startDate
+    }
     if(this.token){
       this.requestQueueJobs()
     }
@@ -158,6 +169,10 @@ export default {
 <style lang="scss" scoped>
 .my-title {
   text-transform: capitalize;
+}
+
+.jobs-title {
+  margin-bottom: 10px;
 }
 
 .squeue-time {
