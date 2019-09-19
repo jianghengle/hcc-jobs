@@ -16,7 +16,7 @@
           <router-link :to="'/rhino'" :class="{'is-active': routePath=='/rhino'}">Rhino</router-link>
           <ul>
             <li><router-link :to="'/rhino/jobs'" :class="{'is-active': routePath.startsWith('/rhino/job')}">Jobs</router-link ></li>
-            <li><a>File System</a></li>
+            <li><router-link :to="'/rhino/fs/%24HOME'" :class="{'is-active': routePath.startsWith('/rhino/fs')}">File System</router-link></li>
           </ul>
         </li>
         <li>

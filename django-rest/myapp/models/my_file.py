@@ -14,7 +14,7 @@ class MyFile(object):
 
         if file_result == 'directory':
             self.type = 'directory'
-            ls_cmd = 'ls -AlhoQ ' + '\'' + path + '\''
+            ls_cmd = 'ls -lhoQ ' + '\'' + path + '\''
             self.content = user.run_command(ls_cmd)
         elif file_result.startswith('symbolic link to'):
             self.type = 'symbolic link'

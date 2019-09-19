@@ -21,7 +21,10 @@ export const state = {
     'SUSPENDED': ['S', 1, true],
     'TIMEOUT': ['TO', 2, false]
   },
-  startDate: null
+  startDate: null,
+  fileSystems: {
+    rhino: ['$HOME', '$WORK', '$COMMON']
+  }
 }
 
 // mutations

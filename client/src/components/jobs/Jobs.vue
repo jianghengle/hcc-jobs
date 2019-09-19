@@ -107,7 +107,7 @@ export default {
       return []
     },
     queueJobs () {
-      if(this.queueResult){
+      if(this.queueResult && this.queueResult.values && this.queueResult.values.length && this.queueResult.values[0]){
         var jobs = this.queueResult.values.map(function(r){
           var job = r.trim().split('|')
           job.pop()

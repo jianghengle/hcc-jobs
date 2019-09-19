@@ -4,6 +4,7 @@ import Account from '@/components/Account'
 import Rhino from '@/components/Rhino'
 import Jobs from '@/components/jobs/Jobs'
 import Job from '@/components/jobs/Job'
+import FileSystem from '@/components/filesystem/FileSystem'
 
 Vue.use(Router)
 
@@ -28,6 +29,11 @@ export default new Router({
       path: '/:resourceName/job/:jobId',
       name: 'Job',
       component: Job
+    },
+    {
+      path: '/:resourceName/fs/:filePath',
+      name: 'FileSystem',
+      component: FileSystem
     },
   ],
 })
