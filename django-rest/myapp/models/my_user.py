@@ -43,4 +43,6 @@ class MyUser(object):
             proc.stdin.write(self.password)
             proc.stdin.flush()
             result, _ = proc.communicate()
-        return result.strip()
+            if proc.returncode != 0:
+                raise Exception('run command returns nonzero code')
+        return result.decode('utf-8').strip()
