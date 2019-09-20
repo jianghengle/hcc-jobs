@@ -25,6 +25,13 @@ import 'echarts/lib/component/title'
 import 'echarts/lib/component/tooltip'
 Vue.component('v-chart', ECharts)
 
+import "prismjs";
+import "prismjs/themes/prism.css";
+
+import VuePrismEditor from "vue-prism-editor";
+import "vue-prism-editor/dist/VuePrismEditor.css"; // import the styles
+Vue.component("prism-editor", VuePrismEditor);
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

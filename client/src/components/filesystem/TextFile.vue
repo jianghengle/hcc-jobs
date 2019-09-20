@@ -38,49 +38,27 @@
       <address-bar></address-bar>
     </div>
 
-    <div>
-      <table class="table is-fullwidth is-hoverable">
-        <thead>
-          <tr>
-            <th>{{files.length}}</th>
-            <th>Type</th>
-            <th>Name</th>
-            <th>Size</th>
-            <th>Date</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(f, i) in files" class="clickable" @click="viewFile(f)">
-            <td><span class="checkbox"><input type="checkbox"></span></td>
-            <td>
-              <span class="icon" v-if="f.type=='directory'">
-                <v-icon name="folder"/>
-              </span>
-            </td>
-            <td :class="{'has-text-weight-bold':f.type=='directory'}">{{f.name}}</td>
-            <td><span v-if="f.type!='directory'">{{f.size}}</span></td>
-            <td>{{f.date}}</td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="my-container">
+      <prism-editor :code="textFile.content" :line-numbers="true" language="shell" class="my-editor"></prism-editor>
     </div>
   </div>
 </template>
 
 <script>
 import AddressBar from './AddressBar'
+import PrismEditor from "vue-prism-editor";
 
 export default {
-  name: 'directory',
+  name: 'text-file',
   components: {
-    AddressBar
+    AddressBar,
+    PrismEditor
   },
   data () {
     return {
       waiting: false,
       error: '',
+      code: 'some code'
     }
   },
   computed: {
@@ -93,37 +71,14 @@ export default {
     filePath () {
       return decodeURIComponent(this.$route.params.filePath)
     },
-    directory () {
+    textFile () {
       return this.$store.state.info.fileCache[this.resourceName][this.filePath]
     },
-    files () {
-      var rows = this.directory.content.split('\n')
-      rows.shift()
-      var files = []
-      for(var i=0;i<rows.length;i++){
-        var row = rows[i]
-        var file = {}
-        var parts = row.split('"')
-        file.name = parts[1]
-        file.path = this.directory.path + '/' + file.name
-        file.date = parts[0].slice(-13 ,-1)
-        var ss = parts[0].split(/\ +/)
-        file.type = ss[1] > 1 ? 'directory' : 'file'
-        file.size = ss[3]
-        files.push(file)
-      }
-      return files
-    }
   },
   methods: {
-    viewFile (f) {
-      var path = '/' + this.resourceName + '/fs/' + encodeURIComponent(f.path)
-      this.$router.push(path)
+    updateText () {
     },
   },
-  mounted () {
-    
-  }
 }
 </script>
 
@@ -133,5 +88,12 @@ export default {
   text-transform: capitalize;
 }
 
+.my-container{
+  padding-top: 15px;
+
+  .my-editor{
+    border-radius: 5px;
+  }
+}
 
 </style>

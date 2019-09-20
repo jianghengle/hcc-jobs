@@ -11,30 +11,29 @@
       Failed to get the directory or file.
     </div>
 
-    <div v-if="waiting" class="has-text-centered">
-      <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
+    <div v-if="file">
+      <directory v-if="file.type == 'directory'"></directory>
+      <text-file v-if="file.type == 'text file'"></text-file>
     </div>
-    <div v-else>
-      <div v-if="file">
-        <directory v-if="file.type == 'directory'" :directory="file"></directory>
-      </div>
+    <div v-else class="has-text-centered">
+      <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
     </div>
   </div>
 </template>
 
 <script>
 import Directory from './Directory'
+import TextFile from './TextFile'
 
 export default {
   name: 'file-system',
   components: {
-    Directory
+    Directory,
+    TextFile
   },
   data () {
     return {
-      waiting: false,
       error: '',
-      file: null,
     }
   },
   computed: {
@@ -50,6 +49,9 @@ export default {
     filePath () {
       return decodeURIComponent(this.$route.params.filePath)
     },
+    file () {
+      return this.$store.state.info.fileCache[this.resourceName][this.filePath]
+    }
   },
   watch: {
     resourceName: function (val) {
@@ -61,18 +63,15 @@ export default {
   },
   methods: {
     requestFile () {
-      this.waiting = true
       this.$http.get(this.server + '/myapp/get_file/' + this.filePath).then(response => {
         if(response.body.type){
-          this.file = response.body
+          this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
           this.error = ''
         }else{
           this.error = 'Failed to get the file!'
         }
-        this.waiting = false
       }, response => {
         this.error = 'Failed to get the file!'
-        this.waiting = false
       })
     },
   },

@@ -12,14 +12,22 @@ class MyFile(object):
         if file_result == 'cannot open (No such file or directory)':
             raise Exception('no such file')
 
-        if file_result == 'directory':
+        if 'no read permission' in file_result:
+            raise Exception('permission denied')
+        elif file_result == 'empty':
+            self.type = 'text file'
+            self.content = ''
+        elif file_result == 'very short file (no magic)':
+            self.type = 'text file'
+            self.content = ''
+        elif file_result == 'directory':
             self.type = 'directory'
             ls_cmd = 'ls -lhoQ ' + '\'' + path + '\''
             self.content = user.run_command(ls_cmd)
         elif file_result.startswith('symbolic link to'):
             self.type = 'symbolic link'
             self.content = file_result
-        elif file_result == 'ASCII text':
+        elif 'ASCII text' in file_result:
             self.type = 'text file'
             cat_cmd = 'cat ' + '\'' + path + '\''
             self.content = user.run_command(cat_cmd)

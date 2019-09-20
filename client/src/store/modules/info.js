@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 // initial state
 export const state = {
   servers: {
@@ -24,6 +26,9 @@ export const state = {
   startDate: null,
   fileSystems: {
     rhino: ['$HOME', '$WORK', '$COMMON']
+  },
+  fileCache: {
+    rhino: {}
   }
 }
 
@@ -32,6 +37,9 @@ export const mutations = {
   setStartDate (state, startDate) {
     state.startDate = startDate
   },
+  cacheFile (state, obj) {
+    Vue.set(state.fileCache[obj.resourceName], obj.file.path, obj.file)
+  }
 }
 
 export default {
