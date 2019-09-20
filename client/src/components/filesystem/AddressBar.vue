@@ -1,7 +1,7 @@
 <template>
   <div>
     <nav class="breadcrumb" aria-label="breadcrumbs">
-      <ul>
+      <ul class="my-flex-wrap">
         <li v-for="(p, i) in paths" :class="{'is-active': i==paths.length-1}">
           <router-link :to="p.path">{{p.name}}</router-link>
         </li>
@@ -44,5 +44,9 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss" scoped>
 
+.my-flex-wrap {
+  flex-wrap: wrap;
+  flex-shrink: inherit;
+}
 
 </style>

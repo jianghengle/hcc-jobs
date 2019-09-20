@@ -8,7 +8,7 @@
             <my-menu></my-menu>
           </div>
         </div>
-        <div class="column is-paddingless">
+        <div class="column is-paddingless" style="display: grid">
           <div class="main-column">
             <div class="main-content">
               <router-view></router-view>

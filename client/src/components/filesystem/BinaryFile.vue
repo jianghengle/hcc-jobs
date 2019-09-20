@@ -39,20 +39,18 @@
     </div>
 
     <div class="my-container">
-      <prism-editor :code="textFile.content" :line-numbers="true" language="shell" class="my-editor"></prism-editor>
+      <a class="button">Download {{binaryFile.name}}</a>
     </div>
   </div>
 </template>
 
 <script>
 import AddressBar from './AddressBar'
-import PrismEditor from "vue-prism-editor";
 
 export default {
-  name: 'text-file',
+  name: 'binary-file',
   components: {
-    AddressBar,
-    PrismEditor
+    AddressBar
   },
   data () {
     return {
@@ -70,7 +68,7 @@ export default {
     filePath () {
       return decodeURIComponent(this.$route.params.filePath)
     },
-    textFile () {
+    binaryFile () {
       return this.$store.state.info.fileCache[this.resourceName][this.filePath]
     },
   },

@@ -22,9 +22,9 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
           <div class="dropdown-content">
-            <a class="dropdown-item">
-              New Folder
-            </a>
+            <router-link class="dropdown-item" v-for="fs in fileSystems" :to="fs.to">
+              {{fs.path}}
+            </router-link>
             
             <hr class="dropdown-divider">
             <a class="dropdown-item">
@@ -39,7 +39,7 @@
     </div>
 
     <div>
-      <table class="table is-fullwidth is-hoverable">
+      <table class="table is-fullwidth is-hoverable is-striped">
         <thead>
           <tr>
             <th>{{files.length}}</th>
@@ -113,6 +113,15 @@ export default {
         files.push(file)
       }
       return files
+    },
+    fileSystems () {
+      var vm = this
+      return this.$store.state.info.fileSystems[this.resourceName].map(function(fs){
+        return {
+          path: fs,
+          to: '/' + vm.resourceName + '/fs/' + encodeURIComponent(fs)
+        }
+      })
     }
   },
   methods: {

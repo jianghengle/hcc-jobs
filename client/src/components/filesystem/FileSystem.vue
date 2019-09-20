@@ -14,6 +14,8 @@
     <div v-if="file">
       <directory v-if="file.type == 'directory'"></directory>
       <text-file v-if="file.type == 'text file'"></text-file>
+      <symbolic-link v-if="file.type == 'symbolic link'"></symbolic-link>
+      <binary-file v-if="file.type == 'binary file'"></binary-file>
     </div>
     <div v-else class="has-text-centered">
       <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
@@ -24,12 +26,16 @@
 <script>
 import Directory from './Directory'
 import TextFile from './TextFile'
+import SymbolicLink from './SymbolicLink'
+import BinaryFile from './BinaryFile'
 
 export default {
   name: 'file-system',
   components: {
     Directory,
-    TextFile
+    TextFile,
+    SymbolicLink,
+    BinaryFile
   },
   data () {
     return {
