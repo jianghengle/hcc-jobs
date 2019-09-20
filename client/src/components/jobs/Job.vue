@@ -293,6 +293,7 @@ export default {
   .detail-value {
     white-space: nowrap;
     overflow: auto;
+    padding-bottom: 10px;
   }
 }
 

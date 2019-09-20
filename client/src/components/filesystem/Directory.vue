@@ -22,15 +22,24 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
           <div class="dropdown-content">
-            <router-link class="dropdown-item" v-for="fs in fileSystems" :to="fs.to">
+            <router-link class="dropdown-item" v-for="fs in fileSystems" :key="'fs-' + fs.path" :to="fs.to">
               {{fs.path}}
             </router-link>
-            
             <hr class="dropdown-divider">
             <a class="dropdown-item">
-              Copy Selected
+              New Directory
             </a>
-            
+            <a class="dropdown-item">
+              New File
+            </a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item">
+              Upload File
+            </a>
+            <hr class="dropdown-divider">
+            <a class="dropdown-item">
+              Edit Directory
+            </a>
           </div>
         </div>
       </div>

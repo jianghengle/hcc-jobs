@@ -14,19 +14,66 @@
           </div>
         </div>
         <div class="navbar-menu" :class="{'is-active': menuActive}">
-          <!--<div class="navbar-start">
-            <router-link class="navbar-item" :to="'/about'">
-              About
-            </router-link>
+          <div class="navbar-start is-hidden-desktop">
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                Account
+              </a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item" @click="goToPath('/')">
+                  {{username ? username : 'Login'}}
+                </a>
+                <a class="navbar-item" v-if="username" @click="logout">
+                  Logout
+                </a>
+              </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a @click="goToPath('/rhino')" class="navbar-link">
+                Rhino
+              </a>
+              <div class="navbar-dropdown">
+                <a @click="goToPath('/rhino/jobs')" class="navbar-item">
+                  Jobs
+                </a>
+                <a @click="goToPath('/rhino/fs/%24HOME')" class="navbar-item">
+                  File System
+                </a>
+              </div>
+            </div>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a @click="goToPath('/crane')" class="navbar-link">
+                Crane
+              </a>
+              <div class="navbar-dropdown">
+                <a @click="goToPath('/crane/jobs')" class="navbar-item">
+                  Jobs
+                </a>
+                <a @click="goToPath('/crane/fs/%24HOME')" class="navbar-item">
+                  File System
+                </a>
+              </div>
+            </div>
+            <a class="navbar-item">
+              Anvil
+            </a>
+            <a class="navbar-item">
+              Attic
+            </a>
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                Other Links
+              </a>
+              <div class="navbar-dropdown">
+                <a class="navbar-item">
+                  HCC Docs
+                </a>
+                <a class="navbar-item">
+                  Globus Transfer
+                </a>
+              </div>
+            </div>
           </div>
-          <div class="navbar-end">
-            <a class="navbar-item" v-if="!token" @click="login">
-              <v-icon name="sign-in-alt"/>&nbsp;Login
-            </a>
-            <a class="navbar-item" v-if="token">
-              <v-icon name="sign-out-alt"/>&nbsp;Logout
-            </a>
-          </div>-->
         </div>
       </div>
     </nav>
@@ -46,9 +93,35 @@ export default {
   computed: {
     token () {
       return this.$store.state.user.token
-    }
+    },
+    username () {
+      return this.$store.state.user.username
+    },
   },
   methods: {
+    logout () {
+      var confirm = {
+        title: 'Logout',
+        message: 'Are you sure to logout?',
+        button: 'Yes, I am sure.',
+        callback: {
+          context: this,
+          method: this.logoutConfirmed,
+          args: []
+        }
+      }
+      this.$store.commit('modals/openConfirmModal', confirm)
+    },
+    logoutConfirmed () {
+      delete Vue.http.headers.common['Authorization']
+      this.$store.commit('user/reset')
+      this.$router.push('/')
+      this.menuActive = false
+    },
+    goToPath(path){
+      this.$router.push(path)
+      this.menuActive = false
+    }
   },
 }
 </script>
