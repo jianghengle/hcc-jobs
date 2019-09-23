@@ -17,3 +17,11 @@ def create_file(request):
     path = request.data['path']
     directory = MyFile.create_file(user, path, filename)
     return Response(directory.json())
+
+@api_view(['POST'])
+def create_directory(request):
+    user = check_session(request)
+    dirname = request.data['dirname']
+    path = request.data['path']
+    directory = MyFile.create_directory(user, path, dirname)
+    return Response(directory.json())

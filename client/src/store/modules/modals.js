@@ -9,6 +9,9 @@ export const state = {
   },
   newFileModal: {
     opened: false
+  },
+  newDirectoryModal: {
+    opened: false
   }
 }
 
@@ -37,6 +40,14 @@ export const mutations = {
 
   closeNewFileModal (state) {
     state.newFileModal.opened = false
+  },
+
+  openNewDirectoryModal (state) {
+    state.newDirectoryModal.opened = true
+  },
+
+  closeNewDirectoryModal (state) {
+    state.newDirectoryModal.opened = false
   },
 }
 

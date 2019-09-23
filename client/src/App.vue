@@ -19,6 +19,7 @@
     </div>
 
     <new-file-modal></new-file-modal>
+    <new-directory-modal></new-directory-modal>
     <confirm-modal></confirm-modal>
   </div>
 </template>
@@ -27,8 +28,10 @@
 import Vue from 'vue'
 import MyHeader from './components/MyHeader'
 import MyMenu from './components/MyMenu'
-import NewFileModal from './components/modals/NewFileModal'
 import ConfirmModal from './components/modals/ConfirmModal'
+import NewFileModal from './components/modals/NewFileModal'
+import NewDirectoryModal from './components/modals/NewDirectoryModal'
+
 
 export default {
   name: 'App',
@@ -36,7 +39,8 @@ export default {
     MyHeader,
     MyMenu,
     ConfirmModal,
-    NewFileModal
+    NewFileModal,
+    NewDirectoryModal
   },
   computed: {
     token () {

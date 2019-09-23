@@ -58,3 +58,10 @@ class MyFile(object):
         touch_cmd = 'touch ' + '\'' + full_path + '\''
         user.run_command(touch_cmd)
         return MyFile(user, path, 'directory')
+
+    @staticmethod
+    def create_directory(user, path, dirname):
+        full_path = os.path.join(path, dirname)
+        mkdir_cmd = 'mkdir ' + '\'' + full_path + '\''
+        user.run_command(mkdir_cmd)
+        return MyFile(user, path, 'directory')

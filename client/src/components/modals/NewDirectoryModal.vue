@@ -4,7 +4,7 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">New File</p>
+        <p class="modal-card-title">New Directory</p>
         <button class="delete" @click="close"></button>
       </header>
       <section class="modal-card-body">
@@ -13,14 +13,14 @@
           {{error}}
         </div>
         <div class="field">
-          <label class="label">File Name</label>
+          <label class="label">Directory Name</label>
           <div class="control">
-            <input class="input" type="text" placeholder="New file name" v-model="filename">
+            <input class="input" type="text" placeholder="New directory name" v-model="dirname">
           </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <a class="button is-link" :class="{'is-loading': waiting}" @click="createFile">Create New File</a>
+        <a class="button is-link" :class="{'is-loading': waiting}" @click="createFile">Create New Directory</a>
         <a class="button" @click="close">Cancel</a>
       </footer>
     </div>
@@ -29,17 +29,17 @@
 
 <script>
 export default {
-  name: 'new-file-modal',
+  name: 'new-directory-modal',
   data () {
     return {
       waiting: false,
       error: '',
-      filename: ''
+      dirname: ''
     }
   },
   computed: {
     opened () {
-      return this.$store.state.modals.newFileModal.opened
+      return this.$store.state.modals.newDirectoryModal.opened
     },
     filePath () {
       return decodeURIComponent(this.$route.params.filePath)
@@ -53,23 +53,23 @@ export default {
   },
   methods: {
     close(){
-      this.$store.commit('modals/closeNewFileModal')
+      this.$store.commit('modals/closeNewDirectoryModal')
     },
     createFile(){
-      this.filename = this.filename.trim()
+      this.dirname = this.dirname.trim()
       this.waiting = true
-      var message = {path: this.filePath, filename: this.filename}
-      this.$http.post(this.server + '/myapp/create_file', message).then(response => {
+      var message = {path: this.filePath, dirname: this.dirname}
+      this.$http.post(this.server + '/myapp/create_directory', message).then(response => {
         if(response.body.path){
           this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
           this.close()
           this.error = ''
         }else{
-          this.error = 'Failed to create the file!'
+          this.error = 'Failed to create the directory!'
         }
         this.waiting = false
       }, response => {
-        this.error = 'Failed to create the file!'
+        this.error = 'Failed to create the directory!'
         this.waiting = false
       })
     }

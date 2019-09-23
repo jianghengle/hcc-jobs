@@ -26,7 +26,7 @@
               {{fs.path}}
             </router-link>
             <hr class="dropdown-divider">
-            <a class="dropdown-item">
+            <a class="dropdown-item" @click="openNewDirectoryModal">
               New Directory
             </a>
             <a class="dropdown-item" @click="openNewFileModal">
@@ -140,6 +140,9 @@ export default {
     },
     openNewFileModal () {
       this.$store.commit('modals/openNewFileModal')
+    },
+    openNewDirectoryModal () {
+      this.$store.commit('modals/openNewDirectoryModal')
     }
   },
   mounted () {
