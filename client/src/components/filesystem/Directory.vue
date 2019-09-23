@@ -70,7 +70,11 @@
             <td :class="{'has-text-weight-bold':f.type=='directory'}">{{f.name}}</td>
             <td><span v-if="f.type!='directory'">{{f.size}}</span></td>
             <td>{{f.date}}</td>
-            <td></td>
+            <td>
+              <a class="icon" @click.stop="openEditFileDirectoryModal(f)">
+                <v-icon name="edit"/>
+              </a>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -152,7 +156,6 @@ export default {
         var name = parts.pop()
         var obj = {path: parts.join('/'), name: name, current: true}
       }
-      console.log(obj)
       this.$store.commit('modals/openEditFileDirectoryModal', obj)
     }
   },

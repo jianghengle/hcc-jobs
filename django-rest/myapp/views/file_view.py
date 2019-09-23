@@ -1,3 +1,4 @@
+import os
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from ..models.my_file import MyFile
@@ -30,11 +31,20 @@ def create_directory(request):
 
 @api_view(['POST'])
 def update_file_directory(request):
-	user = check_session(request)
-	path = request.data['path']
-	old_name = request.data['oldName']
-	new_name = request.data['newName']
-	MyFile.update_name(user, path, old_name, new_name)
-	parent = MyFile(user, path, 'directory')
-	child = MyFile(user, os.path.join(path, new_name))
-	return Response({'parent': parent.json(), 'child': child.json()})
+    user = check_session(request)
+    path = request.data['path']
+    old_name = request.data['oldName']
+    new_name = request.data['newName']
+    MyFile.update_name(user, path, old_name, new_name)
+    parent = MyFile(user, path, 'directory')
+    child = MyFile(user, os.path.join(path, new_name))
+    return Response({'parent': parent.json(), 'child': child.json()})
+
+@api_view(['POST'])
+def delete_file_directory(request):
+    user = check_session(request)
+    path = request.data['path']
+    name = request.data['name']
+    MyFile.delete(os.path.join(path, name))
+    parent = MyFile(user, path, 'directory')
+    return Response(parent.json())

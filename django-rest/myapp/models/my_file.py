@@ -70,3 +70,8 @@ class MyFile(object):
         new_full_path = os.path.join(path, new_name)
         mv_cmd = 'mv -n -T ' + '\'' + old_full_path + '\' \'' + new_full_path + '\''
         user.run_command(mv_cmd)
+
+    @staticmethod
+    def delete(full_path):
+        rm_cmd = 'rm -r ' + '\'' + full_path + '\''
+        user.run_command(rm_cmd)

@@ -21,6 +21,7 @@
       </section>
       <footer class="modal-card-foot">
         <a class="button is-link" :class="{'is-loading': waiting}" :disabled="!canUpdate" @click="update">Update</a>
+        <a class="button is-danger" :class="{'is-loading': waiting}" :disabled="canUpdate" @click="deleteIt">Delete</a>
         <a class="button" @click="close">Cancel</a>
       </footer>
     </div>
@@ -95,7 +96,43 @@ export default {
         this.error = 'Failed to update!'
         this.waiting = false
       })
-    }
+    },
+    deleteIt(){
+      if(this.canUpdate || this.waiting)
+        return
+      var confirm = {
+        title: 'Delete',
+        message: 'Are you sure to delete this file or directory?',
+        button: 'Yes, I am sure.',
+        callback: {
+          context: this,
+          method: this.deleteConfirmed,
+          args: []
+        }
+      }
+      this.$store.commit('modals/openConfirmModal', confirm)
+    },
+    deleteConfirmed () {
+      this.waiting = true
+      var message = {path: this.path, name: this.name}
+      this.$http.post(this.server + '/myapp/delete_file_directory', message).then(response => {
+        if(response.body.path){
+          this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
+          if(this.current){
+            var path = '/' + this.resourceName + '/fs/' + encodeURIComponent(response.body.path)
+            this.$router.replace(path)
+          }
+          this.close()
+          this.error = ''
+        }else{
+          this.error = 'Failed to update!'
+        }
+        this.waiting = false
+      }, response => {
+        this.error = 'Failed to update!'
+        this.waiting = false
+      })
+    },
   },
 }
 </script>
