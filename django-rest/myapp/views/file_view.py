@@ -45,6 +45,6 @@ def delete_file_directory(request):
     user = check_session(request)
     path = request.data['path']
     name = request.data['name']
-    MyFile.delete(os.path.join(path, name))
+    MyFile.delete(user, os.path.join(path, name))
     parent = MyFile(user, path, 'directory')
     return Response(parent.json())

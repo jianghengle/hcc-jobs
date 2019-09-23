@@ -72,6 +72,6 @@ class MyFile(object):
         user.run_command(mv_cmd)
 
     @staticmethod
-    def delete(full_path):
+    def delete(user, full_path):
         rm_cmd = 'rm -r ' + '\'' + full_path + '\''
         user.run_command(rm_cmd)
