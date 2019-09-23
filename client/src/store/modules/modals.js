@@ -12,6 +12,12 @@ export const state = {
   },
   newDirectoryModal: {
     opened: false
+  },
+  editFileDirectoryModal: {
+    opened: false,
+    path: null,
+    name: null,
+    current: false
   }
 }
 
@@ -48,6 +54,20 @@ export const mutations = {
 
   closeNewDirectoryModal (state) {
     state.newDirectoryModal.opened = false
+  },
+
+  openEditFileDirectoryModal (state, obj) {
+    state.editFileDirectoryModal.path = obj.path
+    state.editFileDirectoryModal.name = obj.name
+    state.editFileDirectoryModal.current = obj.current
+    state.editFileDirectoryModal.opened = true
+  },
+
+  closeEditFileDirectoryModal (state) {
+    state.editFileDirectoryModal.opened = false
+    state.editFileDirectoryModal.path = null
+    state.editFileDirectoryModal.name = null
+    state.editFileDirectoryModal.current = null
   },
 }
 

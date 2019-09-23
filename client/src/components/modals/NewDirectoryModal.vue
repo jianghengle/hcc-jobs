@@ -20,7 +20,7 @@
         </div>
       </section>
       <footer class="modal-card-foot">
-        <a class="button is-link" :class="{'is-loading': waiting}" @click="createFile">Create New Directory</a>
+        <a class="button is-link" :class="{'is-loading': waiting}" @click="createDirectory">Create New Directory</a>
         <a class="button" @click="close">Cancel</a>
       </footer>
     </div>
@@ -50,12 +50,17 @@ export default {
     server () {
       return this.$store.state.info.servers[this.resourceName]
     },
+    canCreate () {
+      return this.dirname.trim()
+    }
   },
   methods: {
     close(){
       this.$store.commit('modals/closeNewDirectoryModal')
     },
-    createFile(){
+    createDirectory(){
+      if(!this.canCreate || this.waiting)
+        return
       this.dirname = this.dirname.trim()
       this.waiting = true
       var message = {path: this.filePath, dirname: this.dirname}

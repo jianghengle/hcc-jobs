@@ -20,6 +20,7 @@
 
     <new-file-modal></new-file-modal>
     <new-directory-modal></new-directory-modal>
+    <edit-file-directory-modal></edit-file-directory-modal>
     <confirm-modal></confirm-modal>
   </div>
 </template>
@@ -31,6 +32,7 @@ import MyMenu from './components/MyMenu'
 import ConfirmModal from './components/modals/ConfirmModal'
 import NewFileModal from './components/modals/NewFileModal'
 import NewDirectoryModal from './components/modals/NewDirectoryModal'
+import EditFileDirectoryModal from './components/modals/EditFileDirectoryModal'
 
 
 export default {
@@ -40,7 +42,8 @@ export default {
     MyMenu,
     ConfirmModal,
     NewFileModal,
-    NewDirectoryModal
+    NewDirectoryModal,
+    EditFileDirectoryModal
   },
   computed: {
     token () {

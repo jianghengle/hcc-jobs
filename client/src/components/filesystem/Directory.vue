@@ -36,8 +36,8 @@
             <a class="dropdown-item">
               Upload File
             </a>
-            <hr class="dropdown-divider">
-            <a class="dropdown-item">
+            <hr class="dropdown-divider" v-if="filePath.split('/').length > 1">
+            <a class="dropdown-item" v-if="filePath.split('/').length > 1" @click="openEditFileDirectoryModal(null)">
               Edit Directory
             </a>
           </div>
@@ -143,6 +143,17 @@ export default {
     },
     openNewDirectoryModal () {
       this.$store.commit('modals/openNewDirectoryModal')
+    },
+    openEditFileDirectoryModal (f) {
+      if(f){
+        var obj = {path: this.directory.path, name: f.name, current: false}
+      }else{
+        var parts = this.filePath.split('/')
+        var name = parts.pop()
+        var obj = {path: parts.join('/'), name: name, current: true}
+      }
+      console.log(obj)
+      this.$store.commit('modals/openEditFileDirectoryModal', obj)
     }
   },
   mounted () {

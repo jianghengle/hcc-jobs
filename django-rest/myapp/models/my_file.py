@@ -57,11 +57,16 @@ class MyFile(object):
         full_path = os.path.join(path, filename)
         touch_cmd = 'touch ' + '\'' + full_path + '\''
         user.run_command(touch_cmd)
-        return MyFile(user, path, 'directory')
 
     @staticmethod
     def create_directory(user, path, dirname):
         full_path = os.path.join(path, dirname)
         mkdir_cmd = 'mkdir ' + '\'' + full_path + '\''
-        user.run_command(mkdir_cmd)
-        return MyFile(user, path, 'directory')
+        user.run_command(touch_cmd)
+
+    @staticmethod
+    def update_name(user, path, old_name, new_name):
+        old_full_path = os.path.join(path, old_name)
+        new_full_path = os.path.join(path, new_name)
+        mv_cmd = 'mv -n -T ' + '\'' + old_full_path + '\' \'' + new_full_path + '\''
+        user.run_command(mv_cmd)

@@ -50,12 +50,17 @@ export default {
     server () {
       return this.$store.state.info.servers[this.resourceName]
     },
+    canCreate () {
+      return this.filename.trim()
+    }
   },
   methods: {
     close(){
       this.$store.commit('modals/closeNewFileModal')
     },
     createFile(){
+      if(!this.canCreate || this.waiting)
+        return
       this.filename = this.filename.trim()
       this.waiting = true
       var message = {path: this.filePath, filename: this.filename}
