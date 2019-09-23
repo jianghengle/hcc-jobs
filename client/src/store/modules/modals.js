@@ -7,6 +7,9 @@ export const state = {
     button: '',
     callback: null
   },
+  newFileModal: {
+    opened: false
+  }
 }
 
 // mutations
@@ -26,6 +29,14 @@ export const mutations = {
     state.confirmModal.message = ''
     state.confirmModal.button = ''
     state.confirmModal.callback = null
+  },
+
+  openNewFileModal (state) {
+    state.newFileModal.opened = true
+  },
+
+  closeNewFileModal (state) {
+    state.newFileModal.opened = false
   },
 }
 

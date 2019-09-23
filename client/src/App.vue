@@ -18,6 +18,7 @@
       </div>
     </div>
 
+    <new-file-modal></new-file-modal>
     <confirm-modal></confirm-modal>
   </div>
 </template>
@@ -26,6 +27,7 @@
 import Vue from 'vue'
 import MyHeader from './components/MyHeader'
 import MyMenu from './components/MyMenu'
+import NewFileModal from './components/modals/NewFileModal'
 import ConfirmModal from './components/modals/ConfirmModal'
 
 export default {
@@ -34,6 +36,7 @@ export default {
     MyHeader,
     MyMenu,
     ConfirmModal,
+    NewFileModal
   },
   computed: {
     token () {

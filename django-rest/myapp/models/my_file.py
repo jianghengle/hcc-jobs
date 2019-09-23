@@ -2,13 +2,21 @@ import os
 
 
 class MyFile(object):
-    def __init__(self, user, path):
+    def __init__(self, user, path, file_type=None):
         self.user = user
         self.path = path
         self.name = os.path.basename(path)
+        self.type = file_type
+        self.content = None
 
-        file_cmd = 'file -b ' + '\'' + path + '\''
-        file_result = user.run_command(file_cmd)
+        if not file_type:
+            self.get_type()
+
+        self.get_content()
+
+    def get_type(self):
+        file_cmd = 'file -b ' + '\'' + self.path + '\''
+        file_result = self.user.run_command(file_cmd)
         if file_result == 'cannot open (No such file or directory)':
             raise Exception('no such file')
 
@@ -16,24 +24,25 @@ class MyFile(object):
             raise Exception('permission denied')
         elif file_result == 'empty':
             self.type = 'text file'
-            self.content = ''
         elif file_result == 'very short file (no magic)':
             self.type = 'text file'
-            self.content = ''
         elif file_result == 'directory':
             self.type = 'directory'
-            ls_cmd = 'ls -lhoQ ' + '\'' + path + '\''
-            self.content = user.run_command(ls_cmd)
         elif file_result.startswith('symbolic link to'):
             self.type = 'symbolic link'
             self.content = file_result
         elif 'ASCII text' in file_result:
             self.type = 'text file'
-            cat_cmd = 'cat ' + '\'' + path + '\''
-            self.content = user.run_command(cat_cmd)
         else:
             self.type = 'binary file'
-            self.content = None
+
+    def get_content(self):
+        if self.type == 'directory':
+            ls_cmd = 'ls -lhoQ ' + '\'' + self.path + '\''
+            self.content = self.user.run_command(ls_cmd)
+        elif self.type == 'text file':
+            cat_cmd = 'cat ' + '\'' + self.path + '\''
+            self.content = self.user.run_command(cat_cmd)
 
     def json(self):
         return {
@@ -42,3 +51,10 @@ class MyFile(object):
             'type': self.type,
             'content': self.content
         }
+
+    @staticmethod
+    def create_file(user, path, filename):
+        full_path = os.path.join(path, filename)
+        touch_cmd = 'touch ' + '\'' + full_path + '\''
+        user.run_command(touch_cmd)
+        return MyFile(user, path, 'directory')

@@ -29,7 +29,7 @@
             <a class="dropdown-item">
               New Directory
             </a>
-            <a class="dropdown-item">
+            <a class="dropdown-item" @click="openNewFileModal">
               New File
             </a>
             <hr class="dropdown-divider">
@@ -138,6 +138,9 @@ export default {
       var path = '/' + this.resourceName + '/fs/' + encodeURIComponent(f.path)
       this.$router.push(path)
     },
+    openNewFileModal () {
+      this.$store.commit('modals/openNewFileModal')
+    }
   },
   mounted () {
     

@@ -10,3 +10,10 @@ def get_file(request, path):
     file = MyFile(user, path)
     return Response(file.json())
 
+@api_view(['POST'])
+def create_file(request):
+    user = check_session(request)
+    filename = request.data['filename']
+    path = request.data['path']
+    directory = MyFile.create_file(user, path, filename)
+    return Response(directory.json())

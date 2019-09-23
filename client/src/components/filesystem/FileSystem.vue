@@ -70,7 +70,7 @@ export default {
   methods: {
     requestFile () {
       this.$http.get(this.server + '/myapp/get_file/' + this.filePath).then(response => {
-        if(response.body.type){
+        if(response.body.path){
           this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
           this.error = ''
         }else{
