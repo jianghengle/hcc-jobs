@@ -22,15 +22,13 @@
         </div>
         <div class="dropdown-menu" id="dropdown-menu" role="menu">
           <div class="dropdown-content">
-            <a class="dropdown-item">
-              New Folder
+            <a class="dropdown-item" @click="openEditFileDirectoryModal">
+              Edit File Name
             </a>
-            
             <hr class="dropdown-divider">
             <a class="dropdown-item">
-              Copy Selected
+              Download File
             </a>
-            
           </div>
         </div>
       </div>
@@ -75,6 +73,12 @@ export default {
     },
   },
   methods: {
+    openEditFileDirectoryModal () {
+      var parts = this.filePath.split('/')
+      var name = parts.pop()
+      var obj = {path: parts.join('/'), name: name, current: true}
+      this.$store.commit('modals/openEditFileDirectoryModal', obj)
+    },
     updateText () {
     },
   },
