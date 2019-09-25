@@ -16,7 +16,7 @@
           <router-link :to="'/rhino'" :class="{'is-active': routePath=='/rhino'}">Rhino</router-link>
           <ul>
             <li><router-link :to="'/rhino/jobs'" :class="{'is-active': routePath.startsWith('/rhino/job')}">Jobs</router-link ></li>
-            <li><router-link :to="'/rhino/fs/%24HOME'" :class="{'is-active': routePath.startsWith('/rhino/fs')}">File System</router-link></li>
+            <li><a @click="openFileSystem('rhino')" :class="{'is-active': routePath.startsWith('/rhino/fs')}">File System</a></li>
           </ul>
         </li>
         <li>
@@ -84,6 +84,14 @@ export default {
       this.$store.commit('user/reset')
       this.$router.push('/')
     },
+    openFileSystem (resource) {
+      var lastFilePath = this.$store.state.info.lastFilePath[resource]
+      if(lastFilePath){
+        this.$router.push('/' + resource + '/fs/' + encodeURIComponent(lastFilePath))
+      }else{
+        this.$router.push('/' + resource + '/fs/' + encodeURIComponent('$HOME'))
+      }
+    }
   }
 }
 </script>

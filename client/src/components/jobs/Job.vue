@@ -215,8 +215,8 @@ export default {
       var resSeries = []
       Object.keys(node.ps).forEach(function(pid){
         var p = node.ps[pid]
-        cpuSeries.push({name: pid, type: 'line', smooth: true, data: p.cpus, areaStyle: {opacity: 0.1}})
-        resSeries.push({name: pid, type: 'line', smooth: true, data: p.ress, areaStyle: {opacity: 0.1}})
+        cpuSeries.push({name: pid, type: 'line', showSymbol: false, hoverAnimation: false, smooth: true, data: p.cpus, areaStyle: {opacity: 0.1}})
+        resSeries.push({name: pid, type: 'line', showSymbol: false, hoverAnimation: false, smooth: true, data: p.ress, areaStyle: {opacity: 0.1}})
       })
       node.cpuChart = {
         title: { text: 'CPU %', top: 10 },

@@ -32,6 +32,9 @@ export const state = {
   },
   linkCache: {
     rhino: {}
+  },
+  lastFilePath: {
+    rhino: null
   }
 }
 
@@ -47,6 +50,9 @@ export const mutations = {
   cacheLink (state, obj) {
     var link = {link: obj.link, linkTime: Date.now()}
     Vue.set(state.linkCache[obj.resourceName], obj.path, link)
+  },
+  setLastFilePath (state, obj) {
+    state.lastFilePath[obj.resourceName] = obj.path
   }
 }
 
