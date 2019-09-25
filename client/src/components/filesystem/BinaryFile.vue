@@ -3,7 +3,7 @@
 
     <div v-if="error" class="notification is-danger">
       <button class="delete" @click="error=''"></button>
-      Error
+      {{error}}
     </div>
 
     <div v-if="waiting" class="has-text-centered">
@@ -33,7 +33,16 @@
     </div>
 
     <div class="my-container">
-      <a class="button">Download {{binaryFile.name}}</a>
+      <a class="button" v-if="!link" @click="getDownloadLink">
+        <span class="icon is-small">
+          <v-icon name="download"></v-icon>
+        </span>
+        <span>Get Download Link</span>
+      </a>
+      <a class="button is-loading" v-if="link && !link.link">
+        <span>Get Download Link</span>
+      </a>
+      <a v-if="link && link.link" :href="link.link" target="_blank" download>{{binaryFile.name}}</a>
     </div>
   </div>
 </template>
@@ -65,6 +74,14 @@ export default {
     binaryFile () {
       return this.$store.state.info.fileCache[this.resourceName][this.filePath]
     },
+    link () {
+      var link = this.$store.state.info.linkCache[this.resourceName][this.filePath]
+      if(link){
+        if(Date.now() - link.linkTime < 3600000){
+          return link
+        }
+      }
+    },
   },
   methods: {
     openEditFileDirectoryModal () {
@@ -73,6 +90,20 @@ export default {
       var obj = {path: parts.join('/'), name: name, current: true}
       this.$store.commit('modals/openEditFileDirectoryModal', obj)
     },
+    getDownloadLink () {
+      this.$store.commit('info/cacheLink', {resourceName: this.resourceName, path: this.filePath, link: ''})
+      this.$http.get(this.server + '/myapp/get_download_link/' + this.filePath).then(response => {
+        if(response.body.link){
+          var link = this.server + response.body.link
+          this.$store.commit('info/cacheLink', {resourceName: this.resourceName, path: this.filePath, link: link})
+          this.error = ''
+        }else{
+          this.error = 'Failed to get the file link!'
+        }
+      }, response => {
+        this.error = 'Failed to get the file link!'
+      })
+    }
   },
 }
 </script>

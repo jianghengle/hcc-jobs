@@ -25,7 +25,7 @@
               </a>
               <hr class="dropdown-divider">
               <a class="dropdown-item">
-                Download File
+                Submit Job (sbatch)
               </a>
             </div>
           </div>
