@@ -92,6 +92,17 @@ class MyFile(object):
         copy_file(user, temp_file_path, path + '/')
         shutil.rmtree(os.path.join(temp_dir, temp_string))
 
+    @staticmethod
+    def update_text(user, path, text):
+        temp_dir = settings.TEMP_DIR
+        temp_string = random_string_digits(32)
+        temp_file_path = os.path.join(temp_dir, temp_string)
+        f= open(temp_file_path, 'w+')
+        f.write(text)
+        f.close()
+        copy_file(user, temp_file_path, path)
+        os.remove(temp_file_path)
+
 
 def copy_file(user, src, dest):
     cp_cmd = 'cp -r ' + '\'' + src + '\'' + ' \'' + dest + '\''

@@ -56,3 +56,11 @@ def upload_file(request, path):
     MyFile.upload_file(user, path, file)
     parent = MyFile(user, path, 'directory')
     return Response(parent.json())
+
+@api_view(['POST'])
+def update_text(request, path):
+    user = check_session(request)
+    text = request.data['text']
+    MyFile.update_text(user, path, text)
+    file = MyFile(user, path, 'text file')
+    return Response(file.json())

@@ -5,39 +5,37 @@
       <button class="delete" @click="error=''"></button>
       Error
     </div>
-
-    <div v-if="waiting" class="has-text-centered">
-      <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
-    </div>
     
     <div>
-      <div class="dropdown is-pulled-right is-right is-hoverable">
-        <div class="dropdown-trigger">
-          <button class="button default-btn dropdown-trigger-button" aria-haspopup="true" aria-controls="dropdown-menu">
-            <span>Actions</span>
-            <span class="icon is-small">
-              <v-icon name="chevron-down" scale="0.8"></v-icon>
-            </span>
-          </button>
-        </div>
-        <div class="dropdown-menu" id="dropdown-menu" role="menu">
-          <div class="dropdown-content">
-            <a class="dropdown-item" @click="openEditFileDirectoryModal">
-              Edit File Name
-            </a>
-            <hr class="dropdown-divider">
-            <a class="dropdown-item">
-              Download File
-            </a>
+      <div class="is-pulled-right">
+        <a class="button is-danger update-button" :class="{'is-loading': waiting}" :disabled="!changed" @click="updateText">Update</a>
+        <div class="dropdown is-right is-hoverable">
+          <div class="dropdown-trigger">
+            <button class="button default-btn dropdown-trigger-button" aria-haspopup="true" aria-controls="dropdown-menu">
+              <span>Actions</span>
+              <span class="icon is-small">
+                <v-icon name="chevron-down" scale="0.8"></v-icon>
+              </span>
+            </button>
+          </div>
+          <div class="dropdown-menu" id="dropdown-menu" role="menu">
+            <div class="dropdown-content">
+              <a class="dropdown-item" @click="openEditFileDirectoryModal">
+                Edit File Name
+              </a>
+              <hr class="dropdown-divider">
+              <a class="dropdown-item">
+                Download File
+              </a>
+            </div>
           </div>
         </div>
       </div>
-
       <address-bar></address-bar>
     </div>
 
     <div class="my-container">
-      <prism-editor :code="textFile.content" :line-numbers="true" language="shell" class="my-editor"></prism-editor>
+      <prism-editor v-model="text" :line-numbers="true" language="shell" class="my-editor"></prism-editor>
     </div>
   </div>
 </template>
@@ -55,7 +53,8 @@ export default {
   data () {
     return {
       waiting: false,
-      error: ''
+      error: '',
+      text: ''
     }
   },
   computed: {
@@ -71,6 +70,9 @@ export default {
     textFile () {
       return this.$store.state.info.fileCache[this.resourceName][this.filePath]
     },
+    changed () {
+      return this.text != this.textFile.content
+    }
   },
   methods: {
     openEditFileDirectoryModal () {
@@ -80,8 +82,26 @@ export default {
       this.$store.commit('modals/openEditFileDirectoryModal', obj)
     },
     updateText () {
+      if(!this.changed || this.waiting)
+        return
+      this.waiting = true
+      this.$http.post(this.server + '/myapp/update_text' + this.filePath, {text: this.text}).then(response => {
+        if(response.body.path){
+          this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
+          this.error = ''
+        }else{
+          this.error = 'Failed to update!'
+        }
+        this.waiting = false
+      }, response => {
+        this.error = 'Failed to update!'
+        this.waiting = false
+      })
     },
   },
+  mounted () {
+    this.text = this.textFile.content
+  }
 }
 </script>
 
@@ -97,6 +117,10 @@ export default {
   .my-editor{
     border-radius: 5px;
   }
+}
+
+.update-button {
+  margin-right: 5px;
 }
 
 </style>
