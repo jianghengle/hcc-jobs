@@ -48,3 +48,11 @@ def delete_file_directory(request):
     MyFile.delete(user, os.path.join(path, name))
     parent = MyFile(user, path, 'directory')
     return Response(parent.json())
+
+@api_view(['POST'])
+def upload_file(request, path):
+    user = check_session(request)
+    file = request.FILES['file']
+    MyFile.upload_file(user, path, file)
+    parent = MyFile(user, path, 'directory')
+    return Response(parent.json())

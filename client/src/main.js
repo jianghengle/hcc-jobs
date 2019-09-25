@@ -16,6 +16,7 @@ import 'vue-awesome/icons/chevron-up'
 import 'vue-awesome/icons/chevron-down'
 import 'vue-awesome/icons/folder'
 import 'vue-awesome/icons/edit'
+import 'vue-awesome/icons/upload'
 import Icon from 'vue-awesome/components/Icon'
 Vue.component('v-icon', Icon)
 

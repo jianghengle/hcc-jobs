@@ -21,6 +21,7 @@
     <new-file-modal></new-file-modal>
     <new-directory-modal></new-directory-modal>
     <edit-file-directory-modal></edit-file-directory-modal>
+    <upload-modal></upload-modal>
     <confirm-modal></confirm-modal>
   </div>
 </template>
@@ -33,6 +34,7 @@ import ConfirmModal from './components/modals/ConfirmModal'
 import NewFileModal from './components/modals/NewFileModal'
 import NewDirectoryModal from './components/modals/NewDirectoryModal'
 import EditFileDirectoryModal from './components/modals/EditFileDirectoryModal'
+import UploadModal from './components/modals/UploadModal'
 
 
 export default {
@@ -43,7 +45,8 @@ export default {
     ConfirmModal,
     NewFileModal,
     NewDirectoryModal,
-    EditFileDirectoryModal
+    EditFileDirectoryModal,
+    UploadModal
   },
   computed: {
     token () {

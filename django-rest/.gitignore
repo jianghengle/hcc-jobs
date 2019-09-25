@@ -12,3 +12,6 @@ venv/
 # db
 db.sqlite3
 data.csv
+
+# static
+myapp/static

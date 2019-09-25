@@ -127,3 +127,6 @@ STATIC_URL = '/static/'
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/myapp/.*$'
 CORS_ALLOW_CREDENTIALS = True
+
+# Temp directory
+TEMP_DIR = '/home/swanson/hjiang5/hcc-jobs/django-rest/myapp/tmp'

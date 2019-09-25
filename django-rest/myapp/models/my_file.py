@@ -1,4 +1,6 @@
 import os
+from django.conf import settings
+from .my_session import random_string_digits
 
 
 class MyFile(object):
@@ -75,3 +77,15 @@ class MyFile(object):
     def delete(user, full_path):
         rm_cmd = 'rm -r ' + '\'' + full_path + '\''
         user.run_command(rm_cmd)
+
+    @staticmethod
+    def upload_file(user, path, file):
+        filename = file.name
+        temp_dir = settings.TEMP_DIR
+        temp_string = random_string_digits(32)
+        os.makedirs(os.path.join(temp_dir, temp_string))
+        temp_file_path = os.path.join(temp_dir, temp_string, filename)
+        with open(temp_file_path, 'wb+') as destination:
+            for chunk in file.chunks():
+                destination.write(chunk)
+

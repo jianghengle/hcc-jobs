@@ -33,7 +33,7 @@
               New File
             </a>
             <hr class="dropdown-divider">
-            <a class="dropdown-item">
+            <a class="dropdown-item" @click="openUploadModal">
               Upload File
             </a>
             <hr class="dropdown-divider" v-if="filePath.split('/').length > 1">
@@ -157,7 +157,10 @@ export default {
         var obj = {path: parts.join('/'), name: name, current: true}
       }
       this.$store.commit('modals/openEditFileDirectoryModal', obj)
-    }
+    },
+    openUploadModal () {
+      this.$store.commit('modals/openUploadModal')
+    },
   },
   mounted () {
     

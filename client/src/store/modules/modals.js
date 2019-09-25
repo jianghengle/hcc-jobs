@@ -18,7 +18,10 @@ export const state = {
     path: null,
     name: null,
     current: false
-  }
+  },
+  uploadModal: {
+    opened: false
+  },
 }
 
 // mutations
@@ -68,6 +71,14 @@ export const mutations = {
     state.editFileDirectoryModal.path = null
     state.editFileDirectoryModal.name = null
     state.editFileDirectoryModal.current = null
+  },
+
+  openUploadModal (state) {
+    state.uploadModal.opened = true
+  },
+
+  closeUploadModal (state) {
+    state.uploadModal.opened = false
   },
 }
 
