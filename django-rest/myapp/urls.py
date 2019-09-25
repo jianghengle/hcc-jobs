@@ -18,4 +18,5 @@ urlpatterns = [
     path('delete_file_directory', file_view.delete_file_directory, name='delete_file_directory'),
     path('upload_file/<path:path>', file_view.upload_file, name='upload_file'),
     path('update_text/<path:path>', file_view.update_text, name='update_text'),
+    path('get_download_link/<path:path>', file_view.get_download_link, name='get_download_link'),
 ]

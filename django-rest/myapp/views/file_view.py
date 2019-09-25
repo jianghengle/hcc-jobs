@@ -64,3 +64,9 @@ def update_text(request, path):
     MyFile.update_text(user, path, text)
     file = MyFile(user, path, 'text file')
     return Response(file.json())
+
+@api_view(['GET'])
+def get_download_link(request, path):
+    user = check_session(request)
+    link = MyFile.get_download_link(user, path)
+    return Response({'link': link})

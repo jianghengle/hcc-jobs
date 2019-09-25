@@ -74,6 +74,15 @@
               <a class="icon" @click.stop="openEditFileDirectoryModal(f)">
                 <v-icon name="edit"/>
               </a>
+              <a class="icon" v-if="f.type!='directory' && !f.link" @click.stop="getDownloadLink(f)">
+                <v-icon name="download"/>
+              </a>
+              <a class="icon" v-if="f.type!='directory' && f.link && !f.link.link">
+                <v-icon class="icon is-small fa-spin" name="spinner"></v-icon>
+              </a>
+              <a class="icon" v-if="f.type!='directory' && f.link && f.link.link" target="_blank" :href="f.link.link">
+                link
+              </a>
             </td>
           </tr>
         </tbody>
@@ -109,6 +118,9 @@ export default {
     directory () {
       return this.$store.state.info.fileCache[this.resourceName][this.filePath]
     },
+    linkCache () {
+      return this.$store.state.info.linkCache[this.resourceName]
+    },
     files () {
       var rows = this.directory.content.split('\n')
       rows.shift()
@@ -123,6 +135,12 @@ export default {
         var ss = parts[0].split(/\ +/)
         file.type = ss[1] > 1 ? 'directory' : 'file'
         file.size = ss[3]
+        if(this.linkCache[file.path]){
+          var link = this.linkCache[file.path]
+          if(Date.now() - link.linkTime < 3600000){
+            file.link = link
+          }
+        }
         files.push(file)
       }
       return files
@@ -161,6 +179,21 @@ export default {
     openUploadModal () {
       this.$store.commit('modals/openUploadModal')
     },
+    getDownloadLink (f) {
+      this.$store.commit('info/cacheLink', {resourceName: this.resourceName, path: f.path, link: ''})
+      this.$http.get(this.server + '/myapp/get_download_link/' + f.path).then(response => {
+        if(response.body.link){
+          var link = this.server + '/' + response.body.link
+          console.log(link)
+          this.$store.commit('info/cacheLink', {resourceName: this.resourceName, path: f.path, link: link})
+          this.error = ''
+        }else{
+          this.error = 'Failed to get the file link!'
+        }
+      }, response => {
+        this.error = 'Failed to get the file link!'
+      })
+    }
   },
   mounted () {
     

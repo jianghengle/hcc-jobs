@@ -29,6 +29,9 @@ export const state = {
   },
   fileCache: {
     rhino: {}
+  },
+  linkCache: {
+    rhino: {}
   }
 }
 
@@ -38,7 +41,12 @@ export const mutations = {
     state.startDate = startDate
   },
   cacheFile (state, obj) {
-    Vue.set(state.fileCache[obj.resourceName], obj.file.path, obj.file)
+    var file = obj.file
+    Vue.set(state.fileCache[obj.resourceName], file.path, file)
+  },
+  cacheLink (state, obj) {
+    var link = {link: obj.link, linkTime: Date.now()}
+    Vue.set(state.linkCache[obj.resourceName], obj.path, link)
   }
 }
 

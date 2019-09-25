@@ -85,7 +85,7 @@ export default {
       if(!this.changed || this.waiting)
         return
       this.waiting = true
-      this.$http.post(this.server + '/myapp/update_text' + this.filePath, {text: this.text}).then(response => {
+      this.$http.post(this.server + '/myapp/update_text/' + this.filePath, {text: this.text}).then(response => {
         if(response.body.path){
           this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
           this.error = ''

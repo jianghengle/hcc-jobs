@@ -103,7 +103,20 @@ class MyFile(object):
         copy_file(user, temp_file_path, path)
         os.remove(temp_file_path)
 
+    @staticmethod
+    def get_download_link(user, path):
+        temp_dir = settings.TEMP_DIR
+        temp_string = random_string_digits(32)
+        temp_path = os.path.join(temp_dir, temp_string)
+        os.makedirs(temp_path, mode=0o757)
+        copy_file(user, path, temp_path, False)
+        filename = os.path.basename(path)
+        return '/static/tmp/' +  temp_string + '/' + filename
 
-def copy_file(user, src, dest):
-    cp_cmd = 'cp -r ' + '\'' + src + '\'' + ' \'' + dest + '\''
+
+def copy_file(user, src, dest, recursive=True):
+    if recursive:
+        cp_cmd = 'cp -r ' + '\'' + src + '\'' + ' \'' + dest + '\''
+    else:
+        cp_cmd = 'cp ' + '\'' + src + '\'' + ' \'' + dest + '\''
     user.run_command(cp_cmd)
