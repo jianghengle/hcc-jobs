@@ -145,6 +145,7 @@ export default {
           upload.percentage = 100
           upload.done = true
           upload.request = null
+          vm.$store.commit('info/cacheFile', {resourceName: vm.resourceName, file: response.body})
         }, (response) => {
           var upload = vm.uploads[file.name]
           upload.loaded = 0

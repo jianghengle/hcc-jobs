@@ -34,7 +34,7 @@ class MyFile(object):
         elif file_result.startswith('symbolic link to'):
             self.type = 'symbolic link'
             self.content = file_result
-        elif 'ASCII text' in file_result:
+        elif 'ASCII text' in file_result or 'UTF-8 Unicode text' in file_result:
             self.type = 'text file'
         else:
             self.type = 'binary file'
@@ -94,5 +94,5 @@ class MyFile(object):
 
 
 def copy_file(user, src, dest):
-    cp_cmd = 'cp -r ' + '\'' + src + '\'' + '\'' + dest + '\''
+    cp_cmd = 'cp -r ' + '\'' + src + '\'' + ' \'' + dest + '\''
     user.run_command(cp_cmd)
