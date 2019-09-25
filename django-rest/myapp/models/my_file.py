@@ -109,7 +109,7 @@ class MyFile(object):
         temp_string = random_string_digits(32)
         temp_path = os.path.join(temp_dir, temp_string)
         os.makedirs(temp_path)
-        os.chmod(temp_path, 0o757)
+        os.chmod(temp_path, 0o777)
         copy_file(user, path, temp_path, False)
         filename = os.path.basename(path)
         return '/static/tmp/' +  temp_string + '/' + filename
