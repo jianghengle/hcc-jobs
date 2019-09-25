@@ -1,4 +1,5 @@
 import os
+import shutil
 from django.conf import settings
 from .my_session import random_string_digits
 
@@ -88,4 +89,10 @@ class MyFile(object):
         with open(temp_file_path, 'wb+') as destination:
             for chunk in file.chunks():
                 destination.write(chunk)
+        copy_file(user, temp_file_path, path + '/')
+        shutil.rmtree(os.path.join(temp_dir, temp_string))
 
+
+def copy_file(user, src, dest):
+    cp_cmd = 'cp -r ' + '\'' + src + '\'' + '\'' + dest + '\''
+    user.run_command(cp_cmd)

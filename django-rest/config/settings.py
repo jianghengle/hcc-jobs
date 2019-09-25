@@ -129,4 +129,8 @@ CORS_URLS_REGEX = r'^/myapp/.*$'
 CORS_ALLOW_CREDENTIALS = True
 
 # Temp directory
-TEMP_DIR = '/home/swanson/hjiang5/hcc-jobs/django-rest/myapp/tmp'
+TEMP_DIR = '/var/www/hjiang5/static/tmp'
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+    '/var/www/hjiang5/static/',
+]
