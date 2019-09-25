@@ -18,7 +18,7 @@ class MyFile(object):
         self.get_content()
 
     def get_type(self):
-        file_cmd = 'file -b ' + '\'' + self.path + '\''
+        file_cmd = 'file -b ' + '"' + self.path + '"'
         file_result = self.user.run_command(file_cmd)
         if file_result == 'cannot open (No such file or directory)':
             raise Exception('no such file')
@@ -41,10 +41,10 @@ class MyFile(object):
 
     def get_content(self):
         if self.type == 'directory':
-            ls_cmd = 'ls -lhoQ ' + '\'' + self.path + '\''
+            ls_cmd = 'ls -lhoQ ' + '"' + self.path + '"'
             self.content = self.user.run_command(ls_cmd)
         elif self.type == 'text file':
-            cat_cmd = 'cat ' + '\'' + self.path + '\''
+            cat_cmd = 'cat ' + '"' + self.path + '"'
             self.content = self.user.run_command(cat_cmd)
 
     def json(self):
@@ -58,25 +58,25 @@ class MyFile(object):
     @staticmethod
     def create_file(user, path, filename):
         full_path = os.path.join(path, filename)
-        touch_cmd = 'touch ' + '\'' + full_path + '\''
+        touch_cmd = 'touch ' + '"' + full_path + '"'
         user.run_command(touch_cmd)
 
     @staticmethod
     def create_directory(user, path, dirname):
         full_path = os.path.join(path, dirname)
-        mkdir_cmd = 'mkdir ' + '\'' + full_path + '\''
+        mkdir_cmd = 'mkdir ' + '"' + full_path + '"'
         user.run_command(touch_cmd)
 
     @staticmethod
     def update_name(user, path, old_name, new_name):
         old_full_path = os.path.join(path, old_name)
         new_full_path = os.path.join(path, new_name)
-        mv_cmd = 'mv -n -T ' + '\'' + old_full_path + '\' \'' + new_full_path + '\''
+        mv_cmd = 'mv -n -T ' + '"' + old_full_path + '" "' + new_full_path + '"'
         user.run_command(mv_cmd)
 
     @staticmethod
     def delete(user, full_path):
-        rm_cmd = 'rm -r ' + '\'' + full_path + '\''
+        rm_cmd = 'rm -r ' + '"' + full_path + '"'
         user.run_command(rm_cmd)
 
     @staticmethod
@@ -117,7 +117,7 @@ class MyFile(object):
 
 def copy_file(user, src, dest, recursive=True):
     if recursive:
-        cp_cmd = 'cp -r ' + '\'' + src + '\'' + ' \'' + dest + '\''
+        cp_cmd = 'cp -r ' + '"' + src + '"' + ' "' + dest + '"'
     else:
-        cp_cmd = 'cp ' + '\'' + src + '\'' + ' \'' + dest + '\''
+        cp_cmd = 'cp ' + '"' + src + '"' + ' "' + dest + '"'
     user.run_command(cp_cmd)
