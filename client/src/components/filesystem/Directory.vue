@@ -40,6 +40,13 @@
             <a class="dropdown-item" v-if="filePath.split('/').length > 1" @click="openEditFileDirectoryModal(null)">
               Edit Directory
             </a>
+            <hr class="dropdown-divider" v-if="selectedFiles.length || (clipboard && clipboard.length)">
+            <a class="dropdown-item" v-if="selectedFiles.length" @click="copySelectFiles">
+              <span>Copy Selected ({{selectedFiles.length}})</span>
+            </a>
+            <a class="dropdown-item" v-if="clipboard && clipboard.length" @click="pasteHere">
+              <span>Paste Here ({{clipboard.length}})</span>
+            </a>
             <hr class="dropdown-divider" v-if="selectedFiles.length">
             <a class="dropdown-item" v-if="selectedFiles.length" @click="openDeleteMultipleModal">
               <span class="has-text-danger">Delete Selected ({{selectedFiles.length}})</span>
@@ -167,6 +174,9 @@ export default {
         }
       }
       return files
+    },
+    clipboard () {
+      return this.$store.state.info.clipboard[this.resourceName]
     }
   },
   watch: {
@@ -229,6 +239,14 @@ export default {
     },
     openDeleteMultipleModal () {
       this.$store.commit('modals/openDeleteMultipleModal', this.selectedFiles)
+    },
+    copySelectFiles () {
+      var obj = {}
+      obj[this.resourceName] = this.selectedFiles.map(f => {return f.path})
+      this.$store.commit('info/setClipboard', obj)
+    },
+    pasteHere () {
+      this.$store.commit('modals/openPasteModal')
     }
   },
   mounted () {

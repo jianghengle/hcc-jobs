@@ -70,3 +70,12 @@ def get_download_link(request, path):
     user = check_session(request)
     link = MyFile.get_download_link(user, path)
     return Response({'link': link})
+
+@api_view(['POST'])
+def paste_file_directory(request):
+    user = check_session(request)
+    src = request.data['src']
+    dest = request.data['dest']
+    MyFile.copy_paste(user, src, dest)
+    dest = MyFile(user, dest, 'directory')
+    return Response(dest.json())

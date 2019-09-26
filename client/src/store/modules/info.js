@@ -35,7 +35,8 @@ export const state = {
   },
   lastFilePath: {
     rhino: null
-  }
+  },
+  clipboard: {}
 }
 
 // mutations
@@ -53,6 +54,9 @@ export const mutations = {
   },
   setLastFilePath (state, obj) {
     state.lastFilePath[obj.resourceName] = obj.path
+  },
+  setClipboard (state, obj) {
+    state.clipboard = obj
   }
 }
 

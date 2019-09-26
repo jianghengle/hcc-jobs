@@ -23,6 +23,7 @@
     <edit-file-directory-modal></edit-file-directory-modal>
     <upload-modal></upload-modal>
     <delete-multiple-modal></delete-multiple-modal>
+    <paste-modal></paste-modal>
     <confirm-modal></confirm-modal>
   </div>
 </template>
@@ -37,6 +38,7 @@ import NewDirectoryModal from './components/modals/NewDirectoryModal'
 import EditFileDirectoryModal from './components/modals/EditFileDirectoryModal'
 import UploadModal from './components/modals/UploadModal'
 import DeleteMultipleModal from './components/modals/DeleteMultipleModal'
+import PasteModal from './components/modals/PasteModal'
 
 
 export default {
@@ -49,7 +51,8 @@ export default {
     NewDirectoryModal,
     EditFileDirectoryModal,
     UploadModal,
-    DeleteMultipleModal
+    DeleteMultipleModal,
+    PasteModal
   },
   computed: {
     token () {

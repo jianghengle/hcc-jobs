@@ -114,6 +114,10 @@ class MyFile(object):
         filename = os.path.basename(path)
         return '/static/tmp/' +  temp_string + '/' + filename
 
+    @staticmethod
+    def copy_paste(user, src, dest):
+        copy_file(user, src, dest + '/')
+
 
 def copy_file(user, src, dest, recursive=True):
     if recursive:

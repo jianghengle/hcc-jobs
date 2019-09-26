@@ -4,7 +4,7 @@
     <div class="modal-background"></div>
     <div class="modal-card">
       <header class="modal-card-head">
-        <p class="modal-card-title">Delete Multiple Files</p>
+        <p class="modal-card-title">Paste Files</p>
         <button class="delete" @click="close"></button>
       </header>
       <section class="modal-card-body">
@@ -13,14 +13,14 @@
           {{error}}
         </div>
         <div class="content">
-          <p>Are you sure to delete the files below?</p>
+          <p>Are you sure to paste the files below into {{filePath}}?</p>
           <ul>
-            <li v-for="f in files">{{f.name}}</li>
+            <li v-for="f in files">{{f}}</li>
           </ul>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <a class="button is-danger" :class="{'is-loading': waiting}" @click="deleteMultiple">Yes, delete them all.</a>
+        <a class="button is-link" :class="{'is-loading': waiting}" @click="pasteHere">Yes, paste here.</a>
         <a class="button" @click="close">Cancel</a>
       </footer>
     </div>
@@ -29,7 +29,7 @@
 
 <script>
 export default {
-  name: 'delete-multiple-modal',
+  name: 'paste-modal',
   data () {
     return {
       waiting: false,
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     opened () {
-      return this.$store.state.modals.deleteMultipleModal.opened
+      return this.$store.state.modals.pasteModal.opened
     },
     resourceName () {
       return this.$route.params.resourceName
@@ -47,7 +47,7 @@ export default {
       return this.$store.state.info.servers[this.resourceName]
     },
     files () {
-      return this.$store.state.modals.deleteMultipleModal.files
+      return this.$store.state.info.clipboard[this.resourceName]
     },
     filePath () {
       return decodeURIComponent(this.$route.params.filePath)
@@ -55,24 +55,24 @@ export default {
   },
   methods: {
     close(){
-      this.$store.commit('modals/closeDeleteMultipleModal')
+      this.$store.commit('modals/closePasteModal')
     },
-    deleteMultiple(){
+    pasteHere(){
       if(this.waiting)
         return
       
       var vm = this
       var promises = []
       for(var i=0;i<vm.files.length;i++){
-        let message = {path: vm.filePath, name: vm.files[i].name}
-        var promise = vm.$http.post(vm.server + '/myapp/delete_file_directory', message).then(response => {
+        let message = {src: vm.files[i], dest: this.filePath}
+        var promise = vm.$http.post(vm.server + '/myapp/paste_file_directory', message).then(response => {
           if(response.body.path){
             vm.$store.commit('info/cacheFile', {resourceName: vm.resourceName, file: response.body})
           }else{
-            vm.error = 'Failed to delete some files!'
+            vm.error = 'Failed to paste some files!'
           }
         }, response => {
-          vm.error = 'Failed to delete some files!'
+          vm.error = 'Failed to paste some files!'
         })
         promises.push(promise)
       }
@@ -83,7 +83,7 @@ export default {
         vm.close()
       }, (response) => {
         vm.waiting = false
-        vm.error = 'Some deletes failed...'
+        vm.error = 'Some pastes failed...'
       })
     }
   },

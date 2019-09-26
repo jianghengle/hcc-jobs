@@ -26,6 +26,9 @@ export const state = {
     opened: false,
     files: null
   },
+  pasteModal: {
+    opened: false
+  },
 }
 
 // mutations
@@ -93,6 +96,14 @@ export const mutations = {
   closeDeleteMultipleModal (state) {
     state.deleteMultipleModal.opened = false
     state.deleteMultipleModal.files = null
+  },
+
+  openPasteModal (state) {
+    state.pasteModal.opened = true
+  },
+
+  closePasteModal (state) {
+    state.pasteModal.opened = false
   },
 }
 
