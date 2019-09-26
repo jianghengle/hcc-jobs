@@ -80,3 +80,8 @@ class Job(object):
     def cancel_job(self):
         cmd = 'scancel ' + self.job_id
         self.user.run_command(cmd)
+
+    @staticmethod
+    def submit_job(user, path):
+        cmd = 'sbatch "' + path + '"'
+        return user.run_command(cmd)

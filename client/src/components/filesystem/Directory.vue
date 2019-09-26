@@ -80,7 +80,7 @@
               <a class="icon" v-if="f.type!='directory' && f.link && !f.link.link">
                 <v-icon class="icon is-small fa-spin" name="spinner"></v-icon>
               </a>
-              <a class="icon" v-if="f.type!='directory' && f.link && f.link.link" onclick="event.stopPropagation()" target="_blank" :href="f.link.link" download>
+              <a :id="'download '+f.name" class="icon" v-if="f.type!='directory' && f.link && f.link.link" onclick="event.stopPropagation()" target="_blank" :href="f.link.link" download>
                 link
               </a>
             </td>
@@ -186,6 +186,9 @@ export default {
           var link = this.server + response.body.link
           this.$store.commit('info/cacheLink', {resourceName: this.resourceName, path: f.path, link: link})
           this.error = ''
+          this.$nextTick(function(){
+            document.getElementById('download ' + f.name).click()
+          })
         }else{
           this.error = 'Failed to get the file link!'
         }

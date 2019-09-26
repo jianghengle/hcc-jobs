@@ -3,7 +3,12 @@
 
     <div v-if="error" class="notification is-danger">
       <button class="delete" @click="error=''"></button>
-      Error
+      {{error}}
+    </div>
+
+    <div v-if="success" class="notification is-success">
+      <button class="delete" @click="success=''"></button>
+      {{success}}
     </div>
     
     <div>
@@ -24,7 +29,7 @@
                 Edit File Name
               </a>
               <hr class="dropdown-divider">
-              <a class="dropdown-item">
+              <a class="dropdown-item" @click="sbatchFile">
                 Submit Job (sbatch)
               </a>
             </div>
@@ -54,7 +59,8 @@ export default {
     return {
       waiting: false,
       error: '',
-      text: ''
+      text: '',
+      success: ''
     }
   },
   computed: {
@@ -98,6 +104,35 @@ export default {
         this.waiting = false
       })
     },
+    sbatchFile () {
+      var confirm = {
+        title: 'Submit Job',
+        message: 'Are you sure to submit a new job (sbatch this file)?',
+        button: 'Yes, I am sure.',
+        callback: {
+          context: this,
+          method: this.sbatchFileConfirmed,
+          args: []
+        }
+      }
+      this.$store.commit('modals/openConfirmModal', confirm)
+    },
+    sbatchFileConfirmed () {
+      this.waiting = true
+      this.success = ''
+      this.$http.post(this.server + '/myapp/submit_job', {path: this.filePath}).then(response => {
+        if(response.body.ok){
+          this.success = response.body.result
+          this.error = ''
+        }else{
+          this.error = 'Failed to update!'
+        }
+        this.waiting = false
+      }, response => {
+        this.error = 'Failed to submit job!'
+        this.waiting = false
+      })
+    }
   },
   mounted () {
     this.text = this.textFile.content

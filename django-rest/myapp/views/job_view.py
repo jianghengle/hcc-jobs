@@ -19,6 +19,14 @@ def get_job_detail(request, job_id):
 
 
 @api_view(['POST'])
+def submit_job(request):
+    user = check_session(request)
+    path = request.data['path']
+    result = Job.submit_job(user, path)
+    return Response({'ok': True, 'result': result})
+
+
+@api_view(['POST'])
 def cancel_job(request):
     user = check_session(request)
     job_id = request.data['jobId']

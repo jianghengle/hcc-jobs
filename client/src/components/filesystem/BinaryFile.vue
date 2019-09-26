@@ -37,12 +37,12 @@
         <span class="icon is-small">
           <v-icon name="download"></v-icon>
         </span>
-        <span>Get Download Link</span>
+        <span>Download {{binaryFile.name}}</span>
       </a>
       <a class="button is-loading" v-if="link && !link.link">
-        <span>Get Download Link</span>
+        <span>Download {{binaryFile.name}}</span>
       </a>
-      <a v-if="link && link.link" :href="link.link" target="_blank" download>{{binaryFile.name}}</a>
+      <a id="download-binary-file" v-if="link && link.link" :href="link.link" target="_blank" download>Download {{binaryFile.name}}</a>
     </div>
   </div>
 </template>
@@ -97,6 +97,9 @@ export default {
           var link = this.server + response.body.link
           this.$store.commit('info/cacheLink', {resourceName: this.resourceName, path: this.filePath, link: link})
           this.error = ''
+          this.$nextTick(function(){
+            document.getElementById('download-binary-file').click()
+          })
         }else{
           this.error = 'Failed to get the file link!'
         }
