@@ -22,6 +22,7 @@
     <new-directory-modal></new-directory-modal>
     <edit-file-directory-modal></edit-file-directory-modal>
     <upload-modal></upload-modal>
+    <delete-multiple-modal></delete-multiple-modal>
     <confirm-modal></confirm-modal>
   </div>
 </template>
@@ -35,6 +36,7 @@ import NewFileModal from './components/modals/NewFileModal'
 import NewDirectoryModal from './components/modals/NewDirectoryModal'
 import EditFileDirectoryModal from './components/modals/EditFileDirectoryModal'
 import UploadModal from './components/modals/UploadModal'
+import DeleteMultipleModal from './components/modals/DeleteMultipleModal'
 
 
 export default {
@@ -46,7 +48,8 @@ export default {
     NewFileModal,
     NewDirectoryModal,
     EditFileDirectoryModal,
-    UploadModal
+    UploadModal,
+    DeleteMultipleModal
   },
   computed: {
     token () {

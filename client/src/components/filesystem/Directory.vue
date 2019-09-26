@@ -40,6 +40,10 @@
             <a class="dropdown-item" v-if="filePath.split('/').length > 1" @click="openEditFileDirectoryModal(null)">
               Edit Directory
             </a>
+            <hr class="dropdown-divider" v-if="selectedFiles.length">
+            <a class="dropdown-item" v-if="selectedFiles.length" @click="openDeleteMultipleModal">
+              <span class="has-text-danger">Delete Selected ({{selectedFiles.length}})</span>
+            </a>
           </div>
         </div>
       </div>
@@ -61,7 +65,7 @@
         </thead>
         <tbody>
           <tr v-for="(f, i) in files" class="clickable" @click="viewFile(f)">
-            <td><span class="checkbox"><input type="checkbox"></span></td>
+            <td onclick="event.stopPropagation()"><span class="checkbox"><input type="checkbox" v-model="selections[i]"></span></td>
             <td>
               <span class="icon" v-if="f.type=='directory'">
                 <v-icon name="folder"/>
@@ -103,6 +107,7 @@ export default {
     return {
       waiting: false,
       error: '',
+      selections: []
     }
   },
   computed: {
@@ -153,7 +158,23 @@ export default {
           to: '/' + vm.resourceName + '/fs/' + encodeURIComponent(fs)
         }
       })
+    },
+    selectedFiles () {
+      var files = []
+      for(var i=0;i<this.files.length;i++){
+        if(this.selections[i]){
+          files.push(this.files[i])
+        }
+      }
+      return files
     }
+  },
+  watch: {
+    directory: function (val) {
+      this.$nextTick(function(){
+        this.resetSelections()
+      })
+    },
   },
   methods: {
     viewFile (f) {
@@ -195,10 +216,25 @@ export default {
       }, response => {
         this.error = 'Failed to get the file link!'
       })
+    },
+    resetSelections () {
+      var selections = []
+      for(var i=0;i<this.files.length;i++){
+        if(this.selections[i]){
+          selections.push(true)
+        }else{
+          selections.push(false)
+        }
+      }
+    },
+    openDeleteMultipleModal () {
+      this.$store.commit('modals/openDeleteMultipleModal', this.selectedFiles)
     }
   },
   mounted () {
-    
+    this.$nextTick(function(){
+      this.resetSelections()
+    })
   }
 }
 </script>

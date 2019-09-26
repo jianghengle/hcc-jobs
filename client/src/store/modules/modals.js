@@ -22,6 +22,10 @@ export const state = {
   uploadModal: {
     opened: false
   },
+  deleteMultipleModal: {
+    opened: false,
+    files: null
+  },
 }
 
 // mutations
@@ -79,6 +83,16 @@ export const mutations = {
 
   closeUploadModal (state) {
     state.uploadModal.opened = false
+  },
+
+  openDeleteMultipleModal (state, files) {
+    state.deleteMultipleModal.files = files
+    state.deleteMultipleModal.opened = true
+  },
+
+  closeDeleteMultipleModal (state) {
+    state.deleteMultipleModal.opened = false
+    state.deleteMultipleModal.files = null
   },
 }
 

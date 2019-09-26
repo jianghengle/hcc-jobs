@@ -42,7 +42,7 @@ class MyUser(object):
             proc = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             proc.stdin.write(self.password)
             proc.stdin.flush()
-            result, _ = proc.communicate()
+            result, err = proc.communicate()
             if proc.returncode != 0:
-                raise Exception('run command returns nonzero code')
+                raise Exception('run command returns nonzero code: ' + str(proc.returncode) + '\nerr: ' + err.decode('utf-8'))
         return result.decode('utf-8').strip()
