@@ -85,6 +85,9 @@
               <a class="icon" @click.stop="openEditFileDirectoryModal(f)">
                 <v-icon name="edit"/>
               </a>
+              <a class="icon" @click.stop="copySingleFile(f)">
+                <v-icon name="copy"/>
+              </a>
               <a class="icon" v-if="f.type!='directory' && !f.link" @click.stop="getDownloadLink(f)">
                 <v-icon name="download"/>
               </a>
@@ -243,6 +246,11 @@ export default {
     copySelectFiles () {
       var obj = {}
       obj[this.resourceName] = this.selectedFiles.map(f => {return f.path})
+      this.$store.commit('info/setClipboard', obj)
+    },
+    copySingleFile (f) {
+      var obj = {}
+      obj[this.resourceName] = [f.path]
       this.$store.commit('info/setClipboard', obj)
     },
     pasteHere () {
