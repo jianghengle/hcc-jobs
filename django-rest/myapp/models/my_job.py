@@ -83,5 +83,7 @@ class Job(object):
 
     @staticmethod
     def submit_job(user, path):
-        cmd = 'sbatch "' + path + '"'
+        dirname = os.path.dirname(path)
+        filename = os.path.basename(path)
+        cmd = 'cd "' + dirname + '"; sbatch "' + filename + '"'
         return user.run_command(cmd)

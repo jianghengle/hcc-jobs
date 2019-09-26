@@ -107,7 +107,7 @@ export default {
     sbatchFile () {
       var confirm = {
         title: 'Submit Job',
-        message: 'Are you sure to submit a new job (sbatch this file)?',
+        message: 'Are you sure to submit a new job (sbatch this file here)?',
         button: 'Yes, I am sure.',
         callback: {
           context: this,
