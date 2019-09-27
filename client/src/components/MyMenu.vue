@@ -17,6 +17,7 @@
           <ul>
             <li><router-link :to="'/rhino/jobs'" :class="{'is-active': routePath.startsWith('/rhino/job')}">Jobs</router-link ></li>
             <li><a @click="openFileSystem('rhino')" :class="{'is-active': routePath.startsWith('/rhino/fs')}">File System</a></li>
+            <li><router-link :to="'/rhino/jupyter'" :class="{'is-active': routePath == '/rhino/jupyter'}">Jupyter Notebooks</router-link ></li>
           </ul>
         </li>
         <li>
@@ -24,6 +25,7 @@
           <ul>
             <li><a>Jobs</a></li>
             <li><a>File System</a></li>
+            <li><a>Jupyter Notebooks</a></li>
           </ul>
         </li>
         <li>

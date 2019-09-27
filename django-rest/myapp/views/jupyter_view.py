@@ -8,7 +8,7 @@ from . import check_session
 def get_jupyters(request, cluster):
     user = check_session(request)
     jupyters = Jupyter.get_by_user(cluster, user)
-    return Response([j.json() for j in jupyters])
+    return Response({'jupyters': [j.json() for j in jupyters]})
 
 
 @api_view(['POST'])

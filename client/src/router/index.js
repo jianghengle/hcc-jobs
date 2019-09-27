@@ -5,6 +5,7 @@ import Rhino from '@/components/Rhino'
 import Jobs from '@/components/jobs/Jobs'
 import Job from '@/components/jobs/Job'
 import FileSystem from '@/components/filesystem/FileSystem'
+import Jupyter from '@/components/Jupyter'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/:resourceName/fs/:filePath',
       name: 'FileSystem',
       component: FileSystem
+    },
+    {
+      path: '/:resourceName/jupyter',
+      name: 'Jupyter',
+      component: Jupyter
     },
   ],
 })

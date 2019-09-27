@@ -21,7 +21,7 @@ class Jupyter(models.Model):
             'token': self.token,
             'port': self.port,
             'pid': self.pid,
-            'active_at': self.started_at.timestamp()
+            'startedAt': self.started_at.timestamp()
         }
 
     @staticmethod
