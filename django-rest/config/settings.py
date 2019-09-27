@@ -134,3 +134,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     '/var/www/hjiang5/static/',
 ]
+
+# Jupyter notebook ports range
+JUPYTER_PORTS = range(8100, 8200)

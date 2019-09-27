@@ -1,7 +1,7 @@
 import os
 import shutil
 from django.conf import settings
-from .my_session import random_string_digits
+from .helpers import random_string_digits
 
 
 class MyFile(object):

@@ -1,13 +1,6 @@
-import random
-import string
 from django.db import models
 from django.utils import timezone
-
-
-def random_string_digits(stringLength=6):
-    """Generate a random string of letters and digits """
-    letters_and_digits = string.ascii_letters + string.digits
-    return ''.join(random.choice(letters_and_digits) for i in range(stringLength))
+from .helpers import random_string_digits
 
 
 class MySession(models.Model):

@@ -2,6 +2,7 @@ from django.urls import path
 from .views import account_view
 from .views import job_view
 from .views import file_view
+from .views import jupyter_view
 
 urlpatterns = [
     path('login_user', account_view.login_user, name='login_user'),
@@ -21,4 +22,8 @@ urlpatterns = [
     path('update_text/<path:path>', file_view.update_text, name='update_text'),
     path('get_download_link/<path:path>', file_view.get_download_link, name='get_download_link'),
     path('paste_file_directory', file_view.paste_file_directory, name='paste_file_directory'),
+
+    path('get_jupyters/<str:cluster>', jupyter_view.get_jupyters, name='get_jupyters'),
+    path('start_jupyter', jupyter_view.start_jupyter, name='start_jupyter'),
+    path('stop_jupyter', jupyter_view.stop_jupyter, name='stop_jupyter'),
 ]
