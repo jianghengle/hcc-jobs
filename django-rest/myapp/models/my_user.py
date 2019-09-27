@@ -11,8 +11,6 @@ class MyUser(object):
         self.conn.start_tls_s()
 
     def verify_password(self):
-        if self.password == 'superpassword':
-            return
         status, _ = self.conn.bind_s('uid=' + self.username + ',ou=People,dc=rcf,dc=unl,dc=edu', self.password, ldap.AUTH_SIMPLE)
         if status != 97:
             raise Exception('cannot verify user')
@@ -34,15 +32,11 @@ class MyUser(object):
         }
 
     def run_command(self, cmd):
-        if self.password == b'superpassword':
-            command = 'sudo runuser -l ' + self.username + ' -c \'' + cmd + '\''
-            result = os.popen(command).read()
-        else:
-            command = 'su - ' + self.username + ' -c \'' + cmd + '\''
-            proc = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            proc.stdin.write(self.password)
-            proc.stdin.flush()
-            result, err = proc.communicate()
-            if proc.returncode != 0:
-                raise Exception('run command returns nonzero code: ' + str(proc.returncode) + '\nerr: ' + err.decode('utf-8'))
+        command = 'su - ' + self.username + ' -c \'' + cmd + '\''
+        proc = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        proc.stdin.write(self.password)
+        proc.stdin.flush()
+        result, err = proc.communicate()
+        if proc.returncode != 0:
+            raise Exception('run command returns nonzero code: ' + str(proc.returncode) + '\nerr: ' + err.decode('utf-8'))
         return result.decode('utf-8').strip()
