@@ -20,18 +20,26 @@
       </div>
 
       <div>
-        {{jupyters}}
         <table class="table is-fullwidth is-striped is-hoverable">
           <thead>
             <tr>
               <th>#</th>
               <th>Jupyter Notebook</th>
               <th>Started At</th>
-              <th>Stop</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
-
+            <tr v-for="(jupyter, i) in jupyters">
+              <th>{{i+1}}</th>
+              <td><a :href="jupyter.link" target="_blank">Notebook Link</a></td>
+              <td :class="{'has-text-danger': jupyter.expired}">{{jupyter.startTimeLabel}}<span v-if="jupyter.expired">&nbsp;(Expired)</span></td>
+              <td>
+                <a class="icon has-text-danger" @click="stopJupyter(i)">
+                  <v-icon name="trash"/>
+                </a>
+              </td>
+            </tr>
           </tbody>
         </table>
 
@@ -94,7 +102,9 @@ export default {
     requestJupyters () {
       this.$http.get(this.server + '/myapp/get_jupyters/' + this.resourceName).then(response => {
         if(response.body.jupyters){
-          this.jupyters = response.body.jupyters.map(this.makeJupyter)
+          var jupyters = response.body.jupyters.map(this.makeJupyter)
+          jupyters.sort((a, b) => a.startedAt - b.startedAt)
+          this.jupyters = jupyters
         }else{
           this.error = 'Failed to get jupyters!'
         }
@@ -120,7 +130,39 @@ export default {
     makeJupyter (jupyter) {
       jupyter.link = this.serverWithoutPort + ':' + jupyter.port + '/?token=' + jupyter.token
       jupyter.startTime = new Date(jupyter.startedAt * 1000)
-      jupyter.startTimeLabel = DateFormat(jupyter.startTime, 'mmm dd yy HH:MM')
+      jupyter.startTimeLabel = DateFormat(jupyter.startTime, 'ddd mmm dd HH:MM')
+      jupyter.expired = Date.now() -jupyter.startTime > 86400000
+      return jupyter
+    },
+    stopJupyter (idx) {
+      var jupyter = this.jupyters[idx]
+      var confirm = {
+        title: 'Stop Notebook',
+        message: 'Are you sure to stop the notebook started at ' + jupyter.startTimeLabel + '?',
+        button: 'Yes, I am sure.',
+        callback: {
+          context: this,
+          method: this.stopJupyterConfirmed,
+          args: [idx]
+        }
+      }
+      this.$store.commit('modals/openConfirmModal', confirm)
+    },
+    stopJupyterConfirmed (idx) {
+      var jupyter = this.jupyters[idx]
+      this.waiting = true
+      var message = {jupyterId: jupyter.id}
+      this.$http.post(this.server + '/myapp/stop_jupyter', message).then(response => {
+        if(response.body.ok){
+          this.jupyters.splice(idx, 1)
+        }else{
+          this.error = 'Failed to stop notebook'
+        }
+        this.waiting = false
+      }, response => {
+        this.error = 'Failed to stop notebook!'
+        this.waiting = false
+      })
     }
   },
   mounted () {

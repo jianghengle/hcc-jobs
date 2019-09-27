@@ -1,3 +1,6 @@
+import threading
+import time
+import subprocess
 from django.db import models
 from django.utils import timezone
 from django.conf import settings
@@ -34,14 +37,20 @@ class Jupyter(models.Model):
         jupyter.pid = 0
         jupyter.started_at = timezone.now()
         jupyter.save()
+
         # start jupyter server
+        t = threading.Thread(target=start_jupyter_server, args=(user, jupyter), daemon=True)
+        t.start()
+        time.sleep(3)
         return jupyter
 
     @staticmethod
     def stop(user, jupyter_id):
         jupyter = Jupyter.objects.get(pk=jupyter_id)
         jupyter.delete()
+
         # stop jupyter server
+        stop_jupyter_server(user, jupyter)
         return jupyter
 
     @staticmethod
@@ -58,3 +67,19 @@ def pick_port(cluster):
         raise Exception('All ports are used!')
     index = randint(0, len(ports) - 1)
     return ports[index]
+
+
+def start_jupyter_server(user, jupyter):
+    jupyter_cmd = 'jupyter notebook --ip=0.0.0.0 --port=' + str(jupyter.port) + ' --NotebookApp.token=' + jupyter.token + ' --no-browser'
+    cmd = 'su - ' + user.username + ' -c "' + cmd + '"'
+    proc = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc.stdin.write(self.password)
+    proc.stdin.flush()
+    jupyter.pid = proc.pid
+    jupyter.save()
+    proc.communicate()
+
+
+def stop_jupyter_server(user, jupyter):
+    jupyter_cmd = 'jupyter notebook stop ' + str(jupyter.port)
+    user.run_command(jupyter_cmd)
