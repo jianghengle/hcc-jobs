@@ -71,15 +71,19 @@ def pick_port(cluster):
 
 def start_jupyter_server(user, jupyter):
     jupyter_cmd = 'jupyter notebook --ip=0.0.0.0 --port=' + str(jupyter.port) + ' --NotebookApp.token=' + jupyter.token + ' --no-browser'
-    cmd = 'su - ' + user.username + ' -c "' + cmd + '"'
-    proc = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    proc.stdin.write(self.password)
+    cmd = 'su - ' + user.username + ' -c "' + jupyter_cmd + '"'
+    proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc.stdin.write(user.password)
     proc.stdin.flush()
     jupyter.pid = proc.pid
     jupyter.save()
-    proc.communicate()
+    proc.communicate(timeout=86400)
 
 
 def stop_jupyter_server(user, jupyter):
     jupyter_cmd = 'jupyter notebook stop ' + str(jupyter.port)
-    user.run_command(jupyter_cmd)
+    cmd = 'su - ' + user.username + ' -c "' + jupyter_cmd + '"'
+    proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc.stdin.write(user.password)
+    proc.stdin.flush()
+    proc.communicate(timeout=5)

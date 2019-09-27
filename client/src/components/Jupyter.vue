@@ -43,7 +43,7 @@
           </tbody>
         </table>
 
-        <div v-if="waiting">
+        <div class="has-text-centered" v-if="waiting">
           <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
         </div>
 
