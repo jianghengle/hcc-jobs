@@ -36,8 +36,11 @@
                 <a @click="goToPath('/rhino/jobs')" class="navbar-item">
                   Jobs
                 </a>
-                <a @click="goToPath('/rhino/fs/%24HOME')" class="navbar-item">
+                <a @click="goToPath({fs: 'rhino'})" class="navbar-item">
                   File System
+                </a>
+                <a @click="goToPath('/rhino/jupyter')" class="navbar-item">
+                  Jupyter Notebooks
                 </a>
               </div>
             </div>
@@ -119,8 +122,20 @@ export default {
       this.menuActive = false
     },
     goToPath(path){
-      this.$router.push(path)
+      if(path.fs){
+        this.openFileSystem(path.fs)
+      }else{
+        this.$router.push(path)
+      }
       this.menuActive = false
+    },
+    openFileSystem (resource) {
+      var lastFilePath = this.$store.state.info.lastFilePath[resource]
+      if(lastFilePath){
+        this.$router.push('/' + resource + '/fs/' + encodeURIComponent(lastFilePath))
+      }else{
+        this.$router.push('/' + resource + '/fs/' + encodeURIComponent('$HOME'))
+      }
     }
   },
 }
