@@ -36,7 +36,7 @@
               <td :class="{'has-text-danger': jupyter.expired}">{{jupyter.startTimeLabel}}<span v-if="jupyter.expired">&nbsp;(Expired)</span></td>
               <td>
                 <a class="icon has-text-danger" @click="stopJupyter(i)">
-                  <v-icon name="trash"/>
+                  <v-icon name="recycle"/>
                 </a>
               </td>
             </tr>
@@ -53,7 +53,17 @@
         </div>
 
         <div class="has-text-centered" v-if="jupyters && !jupyters.length">
-          (Empty)
+          (None)
+        </div>
+
+
+        <div class="notification jupyter-notes content">
+          <ul>
+            <li>Click the <strong>Launch New</strong> button to launch a new jupyter notebook, and then click the <strong>Notebook Link</strong> to open it.</li>
+            <li>Each jupyter notebook will last <strong>24 hours</strong> after it started.</li>
+            <li>If you've finished using the notebook or the notebook expires or stops working for some reason, please <strong>shut it down</strong> by clicking the recycle button.</li>
+            <li>Please <strong>AVOID to launch multiple notebooks</strong> on the same cluster to save the resources for other users.</li>
+          </ul>
         </div>
       </div>
     </div>
@@ -182,5 +192,9 @@ export default {
 
 .jupyter-title {
   margin-bottom: 10px;
+}
+
+.jupyter-notes {
+  margin-top: 20px;
 }
 </style>

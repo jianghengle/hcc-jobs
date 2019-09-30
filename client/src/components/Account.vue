@@ -46,11 +46,11 @@
       </div>
     </div>
 
-    <div v-if="token && user">
-      <center class="is-size-5 has-text-weight-bold">Welcome {{user.username}} </center>
-      <center>Please click the menu items to access the resources.</center>
+    <div v-if="token && user" class="user-info-container">
+      <p class="title is-5 has-text-weight-bold">Welcome {{user.username}} </p>
+      <strong>Please click the menu items to access the resources.</strong>
       <div class="user-info">
-        <table class="table">
+        <table class="table is-fullwidth">
           <tbody>
             <tr>
               <th>Username</th>
@@ -77,6 +77,35 @@
           </tbody>
         </table>
       </div>
+
+      <div class="box change-password-box">
+        <article class="media">
+          <div class="media-content">
+            <p class="title is-5">Change Password</p>
+            <div class="field">
+              <label class="label">New Password</label>
+              <div class="control">
+                <input class="input" type="password" placeholder="New password" v-model="newPassword">
+              </div>
+            </div>
+            <div class="field">
+              <label class="label">Retype New Password</label>
+              <div class="control">
+                <input class="input" type="password" placeholder="Retype new password" v-model="newPasswordAgain">
+              </div>
+            </div>
+            <div v-if="changePasswordError" class="notification is-danger">
+              <button class="delete" @click="changePasswordError=''"></button>
+              {{changePasswordError}}
+            </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <button class="button is-link" :disabled="!canChangePassword" :class="{'is-loading': changePasswordWaiting}" @click="changePassword">Change Password</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
     </div>
   </div>
 </template>
@@ -93,7 +122,11 @@ export default {
       rememberMe: false,
       error: '',
       waiting: false,
-      user: null
+      user: null,
+      newPassword: '',
+      newPasswordAgain: '',
+      changePasswordError: '',
+      changePasswordWaiting: false
     }
   },
   computed: {
@@ -102,6 +135,9 @@ export default {
     },
     token () {
       return this.$store.state.user.token
+    },
+    canChangePassword () {
+      return this.newPassword && this.newPassword.length >= 8 && this.newPassword == this.newPasswordAgain
     }
   },
   methods: {
@@ -135,6 +171,39 @@ export default {
         this.waiting = false
       })
     },
+    changePassword () {
+      var confirm = {
+        title: 'Change Password',
+        message: 'Are you sure to change your password? After password changed successfully, you would be logged out and you need to re-login using your new password',
+        button: 'Yes, I am sure.',
+        callback: {
+          context: this,
+          method: this.changePasswordConfirmed,
+          args: []
+        }
+      }
+      this.$store.commit('modals/openConfirmModal', confirm)
+    },
+    changePasswordConfirmed () {
+      if(!this.canChangePassword || this.changePasswordWaiting)
+        return
+      this.changePasswordWaiting = true
+      var message = {newPassword: this.newPassword.trim()}
+      this.$http.post(this.server + '/myapp/change_password', message).then(response => {
+        if(response.body.ok){
+          delete Vue.http.headers.common['Authorization']
+          this.$store.commit('user/reset')
+          this.newPassword = ''
+          this.newPasswordAgain = ''
+        }else{
+          this.changePasswordError = 'Failed to change password: ' + response.body.err
+        }
+        this.changePasswordWaiting = false
+      }, response => {
+        this.error = 'Failed to change password!'
+        this.changePasswordWaiting = false
+      })
+    }
   },
   mounted () {
     if(this.token){
@@ -165,11 +234,17 @@ export default {
   margin: auto;
 }
 
-.user-info {
-  margin-top: 20px;
+.user-info-container {
+  max-width: 600px;
+  margin: auto;
 
-  table {
-    margin: auto;
+  .user-info {
+    margin-top: 20px;
+  }
+
+  .change-password-box {
+    margin-top: 50px;
+    box-shadow: none;
   }
 }
 

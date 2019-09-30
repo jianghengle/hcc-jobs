@@ -19,7 +19,7 @@ import 'vue-awesome/icons/edit'
 import 'vue-awesome/icons/upload'
 import 'vue-awesome/icons/download'
 import 'vue-awesome/icons/copy'
-import 'vue-awesome/icons/trash'
+import 'vue-awesome/icons/recycle'
 import Icon from 'vue-awesome/components/Icon'
 Vue.component('v-icon', Icon)
 
