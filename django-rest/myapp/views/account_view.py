@@ -22,3 +22,13 @@ def login_user(request):
 def get_user(request):
     user = check_session(request)
     return Response(user.json())
+
+
+@api_view(['POST'])
+def change_password(request):
+    user = check_session(request)
+    new_password = request.data['newPassword']
+    result = user.change_password(new_password)
+    if result == None:
+        return Response({'ok': True})
+    return Response({'ok': False, 'err': result})

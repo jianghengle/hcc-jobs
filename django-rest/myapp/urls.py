@@ -7,6 +7,7 @@ from .views import jupyter_view
 urlpatterns = [
     path('login_user', account_view.login_user, name='login_user'),
     path('get_user', account_view.get_user, name='get_user'),
+    path('change_password', account_view.change_password, name='change_password'),
 
     path('get_jobs/<str:start_date>', job_view.get_jobs, name='get_jobs'),
     path('get_job_detail/<str:job_id>/', job_view.get_job_detail, name='get_job_detail'),

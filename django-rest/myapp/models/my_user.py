@@ -15,6 +15,15 @@ class MyUser(object):
         if status != 97:
             raise Exception('cannot verify user')
 
+    def change_password(self, new_password):
+        self.verify_password()
+        result = None
+        try:
+            self.conn.passwd_s('uid=' + self.username + ',ou=People,dc=rcf,dc=unl,dc=edu', self.password, new_password)
+        except Exception as e:
+            result = str(e)
+        return result
+
     def json(self):
         results = self.conn.search_s('ou=People,dc=rcf,dc=unl,dc=edu', ldap.SCOPE_SUBTREE, 'uid=%s' % self.username, attrlist=['*'])
         user = results[0][1]
