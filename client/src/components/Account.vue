@@ -245,6 +245,7 @@ export default {
   .change-password-box {
     margin-top: 50px;
     box-shadow: none;
+    padding: 0px;
   }
 }
 

@@ -13,7 +13,7 @@
     
     <div>
       <div class="is-pulled-right">
-        <a class="button is-danger update-button" :class="{'is-loading': waiting}" :disabled="!changed" @click="updateText">Update</a>
+        <a class="button is-danger update-button" :class="{'is-loading': waiting}" :disabled="!changed" @click="updateText">Save</a>
         <div class="dropdown is-right is-hoverable">
           <div class="dropdown-trigger">
             <button class="button default-btn dropdown-trigger-button" aria-haspopup="true" aria-controls="dropdown-menu">

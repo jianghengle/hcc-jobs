@@ -34,9 +34,9 @@ class MyUser(object):
 
         return {
             'username': self.username,
-            'fullname': user['cn'][0],
-            'email': user['mail'][0],
-            'description': user['description'][0],
+            'fullname': user.get('cn', [''])[0],
+            'email': user.get('mail', [''])[0],
+            'description': user.get('description', [''])[0],
             'groups': groups
         }
 

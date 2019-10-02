@@ -127,7 +127,7 @@ export default {
   },
   methods: {
     requestJob () {
-      this.$http.get(this.server + '/myapp/get_job_detail/' + this.jobId).then(response => {
+      this.$http.get(this.server + '/myapp/get_job_detail/' + this.jobId + '/').then(response => {
         if(response.body.timestamp){
           this.jobDetail = response.body
           this.makeNodes()
