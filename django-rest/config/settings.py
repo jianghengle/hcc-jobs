@@ -20,12 +20,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!pjin28a69!+m!lg^k9#_s##+7-%6q%r3mp%l=m7u21d-*cgv&'
+SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['localhost', '129.93.241.22']
+ALLOWED_HOSTS = ['localhost', 'ood-rhino.unl.edu']
 
 
 # Application definition
