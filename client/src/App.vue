@@ -66,7 +66,7 @@ export default {
   },
   created () {
     if(this.token) {
-      Vue.http.headers.common['Authorization'] = this.token
+      Vue.http.headers.common['MyAuthorization'] = this.token
     }
   },
   mounted () {

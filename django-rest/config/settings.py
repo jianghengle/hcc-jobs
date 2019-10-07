@@ -128,6 +128,11 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r'^/myapp/.*$'
 CORS_ALLOW_CREDENTIALS = True
 
+from corsheaders.defaults import default_headers
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'myauthorization',
+]
+
 # Temp directory
 TEMP_DIR = '/var/www/hjiang5/static/tmp'
 STATICFILES_DIRS = [

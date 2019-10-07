@@ -150,7 +150,7 @@ export default {
           this.user = response.body.user
           var session = response.body.session
           var token = session.token + '$' + btoa(this.password)
-          Vue.http.headers.common['Authorization'] = token
+          Vue.http.headers.common['MyAuthorization'] = token
           this.$store.commit('user/setToken', token)
           this.$store.commit('user/setUsername', session.uid)
           if (this.rememberMe) {
@@ -191,7 +191,7 @@ export default {
       var message = {newPassword: this.newPassword.trim()}
       this.$http.post(this.server + '/myapp/change_password', message).then(response => {
         if(response.body.ok){
-          delete Vue.http.headers.common['Authorization']
+          delete Vue.http.headers.common['MyAuthorization']
           this.$store.commit('user/reset')
           this.newPassword = ''
           this.newPasswordAgain = ''

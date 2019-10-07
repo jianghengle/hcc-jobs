@@ -5,7 +5,7 @@ from ..models.my_user import MyUser
 
 
 def check_session(request):
-    token = request.META.get('HTTP_AUTHORIZATION')
+    token = request.META.get('HTTP_MYAUTHORIZATION')
     if not token:
         raise Exception('no token found')
     tp = token.split('$')

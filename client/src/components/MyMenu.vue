@@ -82,7 +82,7 @@ export default {
       this.$store.commit('modals/openConfirmModal', confirm)
     },
     logoutConfirmed () {
-      delete Vue.http.headers.common['Authorization']
+      delete Vue.http.headers.common['MyAuthorization']
       this.$store.commit('user/reset')
       this.$router.push('/')
     },
