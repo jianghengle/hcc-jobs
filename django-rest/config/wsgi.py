@@ -11,6 +11,8 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-
-application = get_wsgi_application()
+def application(environ, start_response):
+    os.environ['DJANGO_SECRET_KEY'] = environ['DJANGO_SECRET_KEY']
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+    _application = get_wsgi_application()
+    return _application(environ, start_response)

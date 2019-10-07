@@ -3,8 +3,8 @@ import Vue from 'vue'
 // initial state
 export const state = {
   servers: {
-    account: 'http://129.93.241.22:8000',
-    rhino: 'http://129.93.241.22:8000',
+    account: 'http://ood-rhino.unl.edu:8000',
+    rhino: 'http://ood-rhino.unl.edu:8000',
   },
   jobStates: {
     'BOOT_FAIL': ['BF', 2, false],
