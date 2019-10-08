@@ -1,3 +1,4 @@
+import os
 import threading
 import time
 import subprocess
@@ -71,6 +72,9 @@ def pick_port(cluster):
 
 def start_jupyter_server(user, jupyter):
     jupyter_cmd = 'jupyter notebook --ip=0.0.0.0 --port=' + str(jupyter.port) + ' --NotebookApp.token=' + jupyter.token + ' --no-browser'
+    if not settings.DEBUG:
+        (cert_file, key_file) = create_ssl_files(user, jupyter)
+        jupyter_cmd = jupyter_cmd + ' --certfile=' + cert_file + ' --keyfile=' + key_file
     cmd = 'su - ' + user.username + ' -c "' + jupyter_cmd + '"'
     proc = subprocess.Popen(cmd, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     proc.stdin.write(user.password)
@@ -78,6 +82,20 @@ def start_jupyter_server(user, jupyter):
     jupyter.pid = proc.pid
     jupyter.save()
     proc.communicate(timeout=86400)
+
+
+def create_ssl_files(user, jupyter):
+    temp_path = os.path.join(settings.TEMP_DIR, jupyter.token)
+    os.makedirs(temp_path)
+    os.chmod(temp_path, 0o777)
+    key_file = os.path.join(temp_path, 'mykey.key')
+    cert_file = os.path.join(temp_path, 'mycert.pem')
+    openssl_cmd = 'openssl req -x509 -nodes -days 3 -newkey rsa:2048 '
+    openssl_cmd = openssl_cmd + ' -keyout ' + key_file
+    openssl_cmd = openssl_cmd + ' -out ' + cert_file
+    openssl_cmd = openssl_cmd + "-subj '/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com'"
+    user.run_command(openssl_cmd)
+    return (cert_file, key_file)
 
 
 def stop_jupyter_server(user, jupyter):
