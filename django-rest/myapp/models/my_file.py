@@ -65,7 +65,7 @@ class MyFile(object):
     def create_directory(user, path, dirname):
         full_path = os.path.join(path, dirname)
         mkdir_cmd = 'mkdir ' + '"' + full_path + '"'
-        user.run_command(touch_cmd)
+        user.run_command(mkdir_cmd)
 
     @staticmethod
     def update_name(user, path, old_name, new_name):

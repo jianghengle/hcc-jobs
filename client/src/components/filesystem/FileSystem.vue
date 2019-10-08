@@ -18,6 +18,7 @@
       <binary-file v-if="file.type == 'binary file'"></binary-file>
     </div>
     <div v-else class="has-text-centered">
+      <address-bar></address-bar>
       <v-icon class="icon is-medium fa-spin" name="spinner"></v-icon>
     </div>
   </div>
@@ -28,6 +29,7 @@ import Directory from './Directory'
 import TextFile from './TextFile'
 import SymbolicLink from './SymbolicLink'
 import BinaryFile from './BinaryFile'
+import AddressBar from './AddressBar'
 
 export default {
   name: 'file-system',
@@ -35,7 +37,8 @@ export default {
     Directory,
     TextFile,
     SymbolicLink,
-    BinaryFile
+    BinaryFile,
+    AddressBar
   },
   data () {
     return {
