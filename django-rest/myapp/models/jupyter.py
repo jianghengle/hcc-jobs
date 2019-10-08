@@ -58,6 +58,14 @@ class Jupyter(models.Model):
     def get_by_user(cluster, user):
         return list(Jupyter.objects.filter(cluster=cluster, username=user.username))
 
+    @staticmethod
+    def clean_up():
+        now = timezone.now()
+        for jupyter in Jupyter.objects.all():
+            span = now - jupyter.started_at
+            if span.total_seconds() > 86400:
+                jupyter.delete()
+
 
 def pick_port(cluster):
     ports = list(settings.JUPYTER_PORTS)

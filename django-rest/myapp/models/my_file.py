@@ -1,6 +1,7 @@
 import os
 import shutil
 from django.conf import settings
+from django.utils import timezone
 from .helpers import random_string_digits
 
 
@@ -117,6 +118,16 @@ class MyFile(object):
     @staticmethod
     def copy_paste(user, src, dest):
         copy_file(user, src, dest + '/')
+
+    @staticmethod
+    def clean_up():
+        temp_dir = settings.TEMP_DIR
+        now = timezone.now()
+        for f in os.listdir(temp_dir):
+            full_path = os.path.join(temp_dir, f)
+            modified_at = os.path.getmtime(full_path)
+            if now.timestamp() - modified_at > 86400:
+                shutil.rmtree(full_path)
 
 
 def copy_file(user, src, dest, recursive=True):

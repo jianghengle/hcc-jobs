@@ -26,3 +26,11 @@ class MySession(models.Model):
     @staticmethod
     def get_by_token(token):
         return MySession.objects.get(session_token=token)
+
+    @staticmethod
+    def clean_up():
+        now = timezone.now()
+        for session in MySession.objects.all():
+            span = now - session.active_at
+            if span.total_seconds() > 21600:
+                session.delete()
