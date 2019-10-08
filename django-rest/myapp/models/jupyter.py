@@ -93,7 +93,7 @@ def create_ssl_files(user, jupyter):
     openssl_cmd = 'openssl req -x509 -nodes -days 3 -newkey rsa:2048 '
     openssl_cmd = openssl_cmd + ' -keyout ' + key_file
     openssl_cmd = openssl_cmd + ' -out ' + cert_file
-    openssl_cmd = openssl_cmd + "-subj '/C=US/ST=Denial/L=Springfield/O=Dis/CN=www.example.com'"
+    openssl_cmd = openssl_cmd + " -subj '/C=US/ST=NE/L=Lincoln/O=MYHCC/CN=myhcc.unl.edu'"
     user.run_command(openssl_cmd)
     return (cert_file, key_file)
 
