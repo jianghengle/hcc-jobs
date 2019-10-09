@@ -22,7 +22,7 @@ npm run build
 npm run build --report
 ```
 
-Except Vue core package, it also uses [Vuex](https://vuex.vuejs.org/) for state management, [Vue Router](https://router.vuejs.org/) for frontend router, and [Vue Resource](https://github.com/pagekit/vue-resource) to make AJAX calls.
+Except for Vue core package, it also uses [Vuex](https://vuex.vuejs.org/) for state management, [Vue Router](https://router.vuejs.org/) for frontend router, and [Vue Resource](https://github.com/pagekit/vue-resource) to make AJAX calls.
 
 CSS framework is using [Bulma](https://bulma.io/).
 
