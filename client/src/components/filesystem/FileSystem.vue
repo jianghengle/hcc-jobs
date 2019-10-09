@@ -55,6 +55,9 @@ export default {
     server () {
       return this.$store.state.info.servers[this.resourceName]
     },
+    fileType () {
+      return this.$route.params.fileType
+    },
     filePath () {
       return decodeURIComponent(this.$route.params.filePath)
     },
@@ -72,8 +75,9 @@ export default {
   },
   methods: {
     requestFile () {
-      this.$store.commit('info/setLastFilePath', {resourceName: this.resourceName, path: this.filePath})
-      this.$http.get(this.server + '/myapp/get_file/' + this.filePath).then(response => {
+      this.$store.commit('info/setLastFilePath', {resourceName: this.resourceName, filePath: this.filePath, fileType: this.fileType})
+      var url = this.fileType == 'directory' ? (this.server + '/myapp/get_directory/' + this.filePath) : (this.server + '/myapp/get_file/' + this.filePath)
+      this.$http.get(url).then(response => {
         if(response.body.path){
           this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
           this.error = ''

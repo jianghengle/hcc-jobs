@@ -14,6 +14,7 @@ urlpatterns = [
     path('submit_job', job_view.submit_job, name='submit_job'),
     path('cancel_job', job_view.cancel_job, name='cancel_job'),
 
+    path('get_directory/<path:path>', file_view.get_directory, name='get_directory'),
     path('get_file/<path:path>', file_view.get_file, name='get_file'),
     path('create_file', file_view.create_file, name='create_file'),
     path('create_directory', file_view.create_directory, name='create_directory'),

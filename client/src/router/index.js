@@ -32,7 +32,7 @@ export default new Router({
       component: Job
     },
     {
-      path: '/:resourceName/fs/:filePath',
+      path: '/:resourceName/fs/:fileType/:filePath',
       name: 'FileSystem',
       component: FileSystem
     },

@@ -53,7 +53,7 @@ export const mutations = {
     Vue.set(state.linkCache[obj.resourceName], obj.path, link)
   },
   setLastFilePath (state, obj) {
-    state.lastFilePath[obj.resourceName] = obj.path
+    state.lastFilePath[obj.resourceName] = {fileType: obj.fileType, filePath: obj.filePath}
   },
   setClipboard (state, obj) {
     state.clipboard = obj

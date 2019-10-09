@@ -6,6 +6,12 @@ from . import check_session
 
 
 @api_view(['GET'])
+def get_directory(request, path):
+    user = check_session(request)
+    directory = MyFile(user, path, 'directory')
+    return Response(directory.json())
+
+@api_view(['GET'])
 def get_file(request, path):
     user = check_session(request)
     file = MyFile(user, path)
