@@ -52,7 +52,7 @@
                 <a @click="goToPath('/crane/jobs')" class="navbar-item">
                   Jobs
                 </a>
-                <a @click="goToPath('/crane/fs/%24HOME')" class="navbar-item">
+                <a class="navbar-item">
                   File System
                 </a>
               </div>
@@ -132,9 +132,9 @@ export default {
     openFileSystem (resource) {
       var lastFilePath = this.$store.state.info.lastFilePath[resource]
       if(lastFilePath){
-        this.$router.push('/' + resource + '/fs/' + encodeURIComponent(lastFilePath))
+        this.$router.push('/' + resource + '/fs/' + lastFilePath.fileType + '/' + encodeURIComponent(lastFilePath.filePath))
       }else{
-        this.$router.push('/' + resource + '/fs/' + encodeURIComponent('$HOME'))
+        this.$router.push('/' + resource + '/fs/directory/' + encodeURIComponent('$HOME'))
       }
     }
   },

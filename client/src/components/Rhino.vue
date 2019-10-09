@@ -10,7 +10,7 @@
         </router-link>
       </p>
       <p class="control">
-        <router-link :to="'/rhino/fs/%24HOME'" class="button is-link is-outlined">
+        <router-link :to="'/rhino/fs/directory/%24HOME'" class="button is-link is-outlined">
           See You Files
         </router-link>
       </p>

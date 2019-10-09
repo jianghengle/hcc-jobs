@@ -25,6 +25,7 @@ export default {
     paths () {
       var paths = []
       var prefix = ''
+      var routePrefix = '/' + this.resourceName + '/fs/directory/'
       this.filePath.split('/').forEach(function(part){
         var path = {name: part}
         if(!prefix){
@@ -32,7 +33,7 @@ export default {
         }else{
           prefix = prefix + '/' + part
         }
-        path.path = encodeURIComponent(prefix)
+        path.path = routePrefix + encodeURIComponent(prefix)
         paths.push(path)
       })
       return paths

@@ -48,6 +48,9 @@ export default {
     server () {
       return this.$store.state.info.servers[this.resourceName]
     },
+    fileType () {
+      return this.$route.params.fileType
+    },
     current () {
       return this.$store.state.modals.editFileDirectoryModal.current
     },
@@ -83,7 +86,7 @@ export default {
           this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body.parent})
           this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body.child})
           if(this.current){
-            var path = '/' + this.resourceName + '/fs/' + encodeURIComponent(response.body.child.path)
+            var path = '/' + this.resourceName + '/fs/' + this.fileType + '/' + encodeURIComponent(response.body.child.path)
             this.$router.replace(path)
           }
           this.close()
@@ -119,7 +122,7 @@ export default {
         if(response.body.path){
           this.$store.commit('info/cacheFile', {resourceName: this.resourceName, file: response.body})
           if(this.current){
-            var path = '/' + this.resourceName + '/fs/' + encodeURIComponent(response.body.path)
+            var path = '/' + this.resourceName + '/fs/directory/' + encodeURIComponent(response.body.path)
             this.$router.replace(path)
           }
           this.close()

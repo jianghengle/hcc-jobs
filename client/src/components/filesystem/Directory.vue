@@ -165,7 +165,7 @@ export default {
       return this.$store.state.info.fileSystems[this.resourceName].map(function(fs){
         return {
           path: fs,
-          to: '/' + vm.resourceName + '/fs/' + encodeURIComponent(fs)
+          to: '/' + vm.resourceName + '/fs/directory/' + encodeURIComponent(fs)
         }
       })
     },
@@ -191,7 +191,7 @@ export default {
   },
   methods: {
     viewFile (f) {
-      var path = '/' + this.resourceName + '/fs/' + encodeURIComponent(f.path)
+      var path = '/' + this.resourceName + '/fs/' + f.type + '/' + encodeURIComponent(f.path)
       this.$router.push(path)
     },
     openNewFileModal () {
