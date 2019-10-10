@@ -14,11 +14,11 @@ python3 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
 
+# Do database migration 
+python manage.py migrate
+
 # Set environment variable
 export DJANGO_SECRET_KEY=yoursecretstring
-
-# Run django development server
-python manage.py migrate
 
 # Run django development server
 python manage.py runserver
