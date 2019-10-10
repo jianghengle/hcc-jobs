@@ -37,6 +37,10 @@ The Django application settings are in the file `config/settings.py`:
 - `JUPYTER_PORTS`: This is to define the port range to be used by users' Jupyter notebooks. It also determines how many Jupyter notebooks you allow to be launched. Make sure those ports are opened.
 
 
+## Clean up
+After running for a while, the application may generate some files in the `tmp` directory and some entries in the database that would not be used anymore. Use `python manage.py mycleanup` to clean up those things. For production, you should set up a service running this command daily to do the clean up job.
+
+
 ## Deploy production server
 
 Since it is a django application, you can refer to [django deployment documents]( https://docs.djangoproject.com/en/2.2/howto/deployment/) to deploy in your way. The most common way might be using Apache + mod_wsgi:
